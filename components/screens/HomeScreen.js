@@ -4,6 +4,7 @@ import { StyleSheet, View, Text } from "react-native";
 import Constants from "expo-constants";
 
 import TopBar from "../component/TopBar";
+import Weather from "../component/Weather";
 
 export default class HomeScreen extends React.Component {
   constructor(props) {
@@ -19,6 +20,7 @@ export default class HomeScreen extends React.Component {
           style={{ justifyContent: "center", alignItems: "center", flex: 1 }}
         >
           <Text>Home</Text>
+          <Weather></Weather>
         </View>
       </View>
     );

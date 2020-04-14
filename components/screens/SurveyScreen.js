@@ -49,11 +49,12 @@ class SurveyScreen extends React.Component {
     }
   };
 
-  _goToTab() {
+  _goToTab(id) {
     // do something
-    this.props.navigation.replace("TabNavigator");
+    //this.props.navigation.replace("TabNavigator");
     /*
     예시 */
+    console.log(id);
     this.props.navigation.navigate("Setting", {
       greeting: "Hallo",
     });
@@ -66,7 +67,7 @@ class SurveyScreen extends React.Component {
       <TouchableOpacity
         onPress={() =>
           // this.props.navigation && this.props.navigation.push("Home")
-          this._goToTab()
+          this._goToTab(id)
         }
       >
         <SurveyItem

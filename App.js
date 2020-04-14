@@ -67,6 +67,7 @@ const MainStack = createBottomTabNavigator(
 // };
 
 // export default App;
+//asdfasdf
 
 const App = createStackNavigator({
   TabNavigator: {
