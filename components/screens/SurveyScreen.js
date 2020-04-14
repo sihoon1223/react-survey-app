@@ -9,7 +9,6 @@ import {
 import Constants from "expo-constants";
 
 import SurveyItem from "../component/SurveyItem";
-import TopBar from "../component/TopBar";
 
 class SurveyScreen extends React.Component {
   constructor(props) {
@@ -17,17 +16,18 @@ class SurveyScreen extends React.Component {
     this.state = {
       refreshing: false,
       surveyDatas: [],
+      id: null,
     };
   }
 
-  //리스트에서 새로고침시
-  // TODO: 실제로 새로고침 잘 되는지 확인 필요
   onRefresh = () => {
     this._getSurveyData();
   };
 
-  //onEndReached 함수가 실행 되면 기존 데이터에 추가적으로 데이터가져오기
-  /* TODO : 데이터가 붙을 때 기존의 배열에서 더 붙게끔 바꿔야함, 상태관리도 필요*/
+  /* 
+  onEndReached 함수가 실행 되면 기존 데이터에 추가적으로 데이터가져오기
+  TODO : 데이터가 붙을 때 기존의 배열에서 더 붙게끔 바꿔야함, 상태관리도 필요
+  */
   onEndReached = () => {
     this.setState((state) => ({
       surveyDatas: [...state.surveyDatas, ..._getSurveyData()],
@@ -49,26 +49,27 @@ class SurveyScreen extends React.Component {
     }
   };
 
-  _goToTab() {
-    // do something
-    this.props.navigation.replace("TabNavigator");
+  //SurveyScreen2(routeName:Survey_step2 로 네비게이팅)
+  _goToNextStep(id) {
+    this.props.navigation.navigate("Survey_step2", {
+      degree_id: id,
+    });
+
     /*
-    예시 */
+    예시 
+    this.props.navigation.replace("TabNavigator");
     this.props.navigation.navigate("Setting", {
       greeting: "Hallo",
     });
+    */
   }
 
   _renderItem = ({ item }) => {
     const { id, start_date, end_date, survey_title, period } = item; // Destructuring
+
     return (
       // 터치 가능하게 하기
-      <TouchableOpacity
-        onPress={() =>
-          // this.props.navigation && this.props.navigation.push("Home")
-          this._goToTab()
-        }
-      >
+      <TouchableOpacity onPress={() => this._goToNextStep(id)}>
         <SurveyItem
           key={id}
           id={id}
@@ -88,11 +89,9 @@ class SurveyScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        {/* <View style={styles.statusBar} /> */}
-        {/* <TopBar title="KTNET 설문조사 서비스" /> */}
         <Text style={styles.title}>설문조사</Text>
         <View style={styles.survey_container}>
-          <Text style={styles.text}>STEP1. 설문조사를 선택해주세요.</Text>
+          <Text style={styles.text}>STEP 1. 설문조사를 선택해주세요.</Text>
           <FlatList
             data={this.state.surveyDatas}
             keyExtractor={(item, index) => index.toString()}
@@ -133,7 +132,6 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 100,
     padding: "5%",
-    // paddingBottom: -20,
   },
 });
 

@@ -5,7 +5,7 @@ export default function loading() {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      <Text style={styles.text}>로딩뷰입니다 허허</Text>
+      <Text style={styles.text}>Loading</Text>
     </View>
   );
 }

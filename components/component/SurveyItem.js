@@ -3,6 +3,9 @@ import { StyleSheet, Text, View } from "react-native";
 import { Badge } from "react-native-elements";
 
 class SurveyItem extends React.Component {
+  /*
+  TODO: 받아온 데이터의 요소들을 prop을 통해 사용할 것인지, state에 저장할 것인지 추후 결정 필요
+  */
   constructor(props) {
     super(props);
     this.state = {
@@ -14,7 +17,7 @@ class SurveyItem extends React.Component {
     };
   }
 
-  /* TODO : 진행중 구분하기 , 성식주임에게 api 지정 가능한지 물어보기 */
+  // 해당 설문조사의 상태(진행중,준비중,완료)를 구분
   _checkSurveyPeriod() {
     if (this.state.period == "ING") {
       return <Text style={styles.survey_status_badge_ing}>진행중</Text>;
@@ -24,6 +27,7 @@ class SurveyItem extends React.Component {
       return <Text style={styles.survey_status_badge_end}>완료</Text>;
     }
   }
+
   render() {
     const start_date_split = this.state.end_date
       .substring(5, 16)

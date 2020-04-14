@@ -5,9 +5,7 @@ class TopBar extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        {/* <Text style={styles.text}>Left</Text> */}
         <Text style={styles.title}>{this.props.title || "Title"}</Text>
-        {/* <Text style={styles.text}>Right</Text> */}
       </View>
     );
   }
@@ -19,7 +17,6 @@ const styles = StyleSheet.create({
     color: "#000",
     fontWeight: "bold",
   },
-
   container: {
     alignSelf: "stretch",
     height: 40,
