@@ -1,21 +1,71 @@
 import React from "react";
 
-import { View, Text } from "react-native";
+import { createAppContainer } from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack";
+import { createBottomTabNavigator } from "react-navigation-tabs";
+import { View, Text, StyleSheet } from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 import HomeScreen from "./components/screens/HomeScreen";
 import SurveyScreen from "./components/screens/SurveyScreen";
 import SettingScreen from "./components/screens/SettingScreen";
+import DetailScreen from "./components/screens/DetailScreen";
 
-import { createAppContainer } from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
-import { createBottomTabNavigator } from "react-navigation-tabs";
+// 헤더를 세팅한 후 반환
+const Header = (props) => {
+  return (
+    <View style={styles.header_container}>
+      <Text style={styles.header_title}>{props.title}</Text>
+    </View>
+  );
+};
 
-import Ionicons from "react-native-vector-icons/Ionicons";
+/*
+Survey에 관련된 스택네비게이터
+TODO: 추후에 파일 별도로 분리 필요
+*/
+
+const App = createStackNavigator(
+  {
+    Survey_step1: {
+      screen: SurveyScreen,
+      navigationOptions: ({ navigation }) => ({
+        // headerTitle: () => {
+        //   const route = navigation.state.routes[navigation.state.index];
+        //   const routeName = route.routeName;
+        //   return <Header title={routeName} />;
+        // },
+      }),
+    },
+    Survey_step2: {
+      screen: DetailScreen,
+      navigationOptions: ({ navigation }) => ({
+        // headerTitle: () => {
+        //   const routeName = navigation.state.routeName;
+        //   return <Header title={routeName} />;
+        // },
+      }),
+    },
+  },
+  {
+    defaultNavigationOptions: {
+      headerBackTitleVisible: false,
+      headerStyle: {
+        backgroundColor: "#fcfcfc",
+        borderBottomWidth: 1,
+        borderBottomColor: "#d3d3d3",
+      },
+      headerTintColor: "black",
+      headerTitle: "설문조사",
+    },
+    initialRouteName: "Survey_step1",
+  }
+);
 
 const MainStack = createBottomTabNavigator(
   {
     Survey: {
-      screen: SurveyScreen,
+      screen: App,
     },
     Home: {
       screen: HomeScreen,
@@ -60,74 +110,19 @@ const MainStack = createBottomTabNavigator(
   }
 );
 
-// const AppContainer = createAppContainer(MainStack);
+const styles = StyleSheet.create({
+  header_container: { alignItems: "center" },
+  header_title: { fontSize: 18, color: "black", fontWeight: "bold" },
+});
 
-// const App = () => {
-//   return <AppContainer />;
-// };
+export default createAppContainer(MainStack);
 
+/*const AppContainer = createAppContainer(MainStack);
 // export default App;
 //asdfasdf
 
-const App = createStackNavigator({
-  TabNavigator: {
-    screen: MainStack,
-    navigationOptions: ({ navigation }) => ({
-      headerStyle: {
-        backgroundColor: "#fcfcfc",
-        borderBottomWidth: 1,
-        borderBottomColor: "#d3d3d3",
-      },
-      headerTintColor: "#000000",
-
-      headerTitle: () => {
-        const route = navigation.state.routes[navigation.state.index];
-        const routeName = route.routeName;
-        let title;
-        if (routeName === "Home") {
-          title = "Home";
-        } else if (routeName === "Survey") {
-          title = "KTNET 설문조사 서비스";
-        } else if (routeName === "Setting") {
-          title = "Setting";
-        }
-
-        return <Header title={title} />;
-      },
-    }),
-  },
-});
-
-//make up header
-const Header = (props) => {
-  return (
-    <View style={{ alignItems: "center" }}>
-      <Text style={{ fontSize: 18, color: "black", fontWeight: "bold" }}>
-        {props.title}
-      </Text>
-    </View>
-  );
+const App = () => {
+  return <AppContainer />;
 };
 
-export default createAppContainer(App);
-// ({navigation}) => {
-//   headerStyle: {
-//     backgroundColor: "#fcfcfc",
-//     borderBottomWidth: 1,
-//     borderBottomColor: "#d3d3d3",
-//   },
-//   headerTintColor: "#000000",
-
-// }
-// headerTitle: ({ navigation }) => {
-//   const { routeName } = navigation.state;
-//   let title = Text;
-//   if (routeName === "Home") {
-//     title = "Home";
-//   } else if (routeName === "Survey") {
-//     title = "KTNET 설문조사 서비스";
-//   } else if (routeName === "Setting") {
-//     title = "Setting";
-//   }
-//   return <Header title={title} />;
-// },
+export default App;*/
