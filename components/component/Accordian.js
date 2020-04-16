@@ -9,13 +9,10 @@ export default class Accordian extends Component {
     this.state = {
       data: props.data,
       expanded: false,
-      clicked_dept_id: null,
     };
-    console.log("ddd", this.props.changeFromChild);
   }
   //부모인 SurveyScreen2에게 부서 id를 prop으로 넘겨줌
   _changeToParent(dept_id) {
-    console.log("oo", dept_id);
     this.props.changeFromChild(dept_id);
   }
 

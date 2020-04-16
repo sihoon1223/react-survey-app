@@ -2,11 +2,15 @@ import React from "react";
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 
 import Accordian from "../component/Accordian";
+import Get from "../module/Get";
+
+const SERVICE_LIST_URL = "http://61.73.147.176/api/v1/service";
 
 class SurveyScreen3 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: true,
       degree_id: this.props.navigation.state.params.degree_id, //설문조사 회차 id
       dept_id: this.props.navigation.state.params.dept_id,
       service_id: null,
@@ -24,6 +28,11 @@ class SurveyScreen3 extends React.Component {
     };
     this._goToNextStep();
   }
+
+  _dataFromChild = (datas) => {
+    //콜백메서드 등록
+    this.setState({ surveyDatas: datas, isLoading: false });
+  };
 
   //SurveyScreen4(routeName:Survey_step4 로 네비게이팅)
   _goToNextStep() {
@@ -71,21 +80,25 @@ class SurveyScreen3 extends React.Component {
         <Text style={styles.title}>설문조사</Text>
         <View style={styles.survey_container}>
           <Text style={styles.text}>STEP 3. 담당 업무를 선택해주세요.</Text>
-          <ScrollView
-            contentContainerStyle={{
-              paddingHorizontal: 10,
-              paddingVertical: 5,
-            }}
-          >
-            {this.state.surveyDatas.map((item, key) =>
-              /*<ExpandableCardView
+          {this.state.isLoading ? (
+            <Get url={SERVICE_LIST_URL} dataFromChild={this._dataFromChild} />
+          ) : (
+            <ScrollView
+              contentContainerStyle={{
+                paddingHorizontal: 10,
+                paddingVertical: 5,
+              }}
+            >
+              {this.state.surveyDatas.map((item, key) =>
+                /*<ExpandableCardView
                 key={item.id}
                 // onClickFunction={this._updateLayout.bind(this, key)}
                 item={item}
               />*/
-              this.renderAccordians(item)
-            )}
-          </ScrollView>
+                this.renderAccordians(item)
+              )}
+            </ScrollView>
+          )}
         </View>
       </View>
     );

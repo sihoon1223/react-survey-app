@@ -2,11 +2,15 @@ import React, { Component } from "react";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
 
 import Accordian from "../component/Accordian";
+import Get from "../module/Get";
+
+const DEPARTMENT_LIST_URL = "http://61.73.147.176/api/v1/department";
 
 export default class SurveyScreen2 extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: true,
       degree_id: this.props.navigation.state.params.degree_id, //설문조사 회차 id
       dept_id: null,
       surveyDatas: [], //본부별로 저장
@@ -24,30 +28,16 @@ export default class SurveyScreen2 extends Component {
     this._goToNextStep();
   }
 
+  _dataFromChild = (datas) => {
+    //콜백메서드 등록
+    this.setState({ surveyDatas: datas, isLoading: false });
+  };
   //SurveyScreen3(routeName:Survey_step3 로 네비게이팅)
   _goToNextStep() {
     this.props.navigation.navigate("Survey_step3", {
       degree_id: this.state.degree_id,
       dept_id: this.state.dept_id,
     });
-  }
-
-  _getSurveyData = async () => {
-    const url = new URL("http://61.73.147.176/api/v1/department");
-    try {
-      const response = await fetch(url);
-      const responseJson = await response.json();
-
-      this.setState({
-        surveyDatas: responseJson,
-      });
-    } catch (error) {
-      console.error("_getSurveyData", error);
-    }
-  };
-
-  componentDidMount() {
-    this._getSurveyData();
   }
 
   renderAccordians = (item) => {
@@ -69,21 +59,23 @@ export default class SurveyScreen2 extends Component {
         <Text style={styles.title}>설문조사</Text>
         <View style={styles.survey_container}>
           <Text style={styles.text}>STEP 2. 소속 부서를 선택해주세요.</Text>
-          <ScrollView
-            contentContainerStyle={{
-              paddingHorizontal: 10,
-              paddingVertical: 5,
-            }}
-          >
-            {this.state.surveyDatas.map((item, key) =>
-              /*<ExpandableCardView
-                key={item.id}
-                // onClickFunction={this._updateLayout.bind(this, key)}
-                item={item}
-              />*/
-              this.renderAccordians(item)
-            )}
-          </ScrollView>
+          {this.state.isLoading ? (
+            <Get
+              url={DEPARTMENT_LIST_URL}
+              dataFromChild={this._dataFromChild}
+            />
+          ) : (
+            <ScrollView
+              contentContainerStyle={{
+                paddingHorizontal: 10,
+                paddingVertical: 5,
+              }}
+            >
+              {this.state.surveyDatas.map((item, key) =>
+                this.renderAccordians(item)
+              )}
+            </ScrollView>
+          )}
         </View>
       </View>
     );
