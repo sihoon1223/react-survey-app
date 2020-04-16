@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import {
   StyleSheet,
   TouchableOpacity,
@@ -9,44 +9,46 @@ import {
 import Constants from "expo-constants";
 
 import SurveyItem from "../component/SurveyItem";
+import Get from "../module/Get";
+
+const SURVEY_LIST_URL = "http://61.73.147.176/api/v1/survey/degree";
 
 class SurveyScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      refreshing: false,
+      refreshing: false, //데이터를 새로고침해서 가져오는 중인지 판단
+      isLoading: true,
       surveyDatas: [],
-      id: null,
     };
   }
 
+  //get 모듈을 통해 가져온 데이터를 스테이트에 세팅
+  _dataFromChild = (datas) => {
+    //콜백메서드 등록
+
+    // this.setState({ surveyDatas: datas, isLoading: false }, () => {
+    //   console.log("isLoading", this.state.isLoading);
+    // });
+
+    this.setState({ surveyDatas: datas, isLoading: false });
+  };
+
+  //새로고침시 작동하는 함수
   onRefresh = () => {
-    this._getSurveyData();
+    this.setState({ refreshing: true }, () => {
+      console.log("refreshing", this.state.refreshing);
+    });
   };
 
   /* 
   onEndReached 함수가 실행 되면 기존 데이터에 추가적으로 데이터가져오기
-  TODO : 데이터가 붙을 때 기존의 배열에서 더 붙게끔 바꿔야함, 상태관리도 필요
+  TODO : 데이터가 붙을 때 기존의 배열에서 더 붙게끔 바꿔야함, 상태관리도 필요 (서버에서 현재 페이지 처리 안함)
   */
   onEndReached = () => {
     this.setState((state) => ({
       surveyDatas: [...state.surveyDatas, ..._getSurveyData()],
     }));
-  };
-
-  _getSurveyData = async () => {
-    const url = new URL("http://61.73.147.176/api/v1/survey/degree");
-
-    try {
-      const response = await fetch(url);
-      const responseJson = await response.json();
-
-      this.setState({
-        surveyDatas: responseJson,
-      });
-    } catch (error) {
-      console.error("_getSurveyData", error);
-    }
   };
 
   //SurveyScreen2(routeName:Survey_step2 로 네비게이팅)
@@ -82,26 +84,29 @@ class SurveyScreen extends React.Component {
     );
   };
 
-  componentDidMount() {
-    this._getSurveyData();
-  }
-
   render() {
+    console.log("SurveyScreen/render");
     return (
       <View style={styles.container}>
         <Text style={styles.title}>설문조사</Text>
         <View style={styles.survey_container}>
           <Text style={styles.text}>STEP 1. 설문조사를 선택해주세요.</Text>
-          <FlatList
-            data={this.state.surveyDatas}
-            keyExtractor={(item, index) => index.toString()}
-            initialNumToRender={20}
-            //스크롤이 onEndReachedThreshold에 설정한 값에 도달하면 onEndReached 함수가 실행 (인피니티 스크롤
-            onEndReachedThreshold={1}
-            refreshing={this.state.refreshing}
-            onRefresh={this.onRefresh}
-            renderItem={this._renderItem}
-          />
+          {this.state.isLoading || this.state.refreshing ? (
+            <Get url={SURVEY_LIST_URL} dataFromChild={this._dataFromChild}>
+              {(this.state.refreshing = false)}
+            </Get>
+          ) : (
+            <FlatList
+              data={this.state.surveyDatas}
+              keyExtractor={(item, index) => index.toString()}
+              initialNumToRender={20}
+              //스크롤이 onEndReachedThreshold에 설정한 값에 도달하면 onEndReached 함수가 실행 (인피니티 스크롤
+              onEndReachedThreshold={1}
+              refreshing={this.state.refreshing}
+              onRefresh={this.onRefresh}
+              renderItem={this._renderItem}
+            />
+          )}
         </View>
       </View>
     );
