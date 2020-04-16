@@ -3,6 +3,7 @@ import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 
 import Weather from "../component/Weather";
+import SurveyQuestionList from "../screens/SurveyQuestionList";
 
 export default class HomeScreen extends React.Component {
   constructor(props) {
@@ -15,8 +16,7 @@ export default class HomeScreen extends React.Component {
         <View
           style={{ justifyContent: "center", alignItems: "center", flex: 1 }}
         >
-          <Text>Home</Text>
-          <Weather></Weather>
+          <SurveyQuestionList />
         </View>
       </View>
     );

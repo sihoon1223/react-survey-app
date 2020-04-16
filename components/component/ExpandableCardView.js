@@ -7,7 +7,7 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-import CardView from "react-native-cardview";
+// import CardView from "react-native-cardview";
 
 class ExpandableCardView extends Component {
   constructor(props) {
@@ -26,38 +26,38 @@ class ExpandableCardView extends Component {
     const layout_height = this.props.item.expanded ? null : 0;
     return (
       <View style={styles.MainContainer}>
-        <CardView
+        {/* <CardView
           cardElevation={2}
           cardMaxElevation={2}
           cornerRadius={5}
           style={{ backgroundColor: "#fcfcfc" }}
+        > */}
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={this.props.onClickFunction}
+          style={styles.category_View}
         >
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={this.props.onClickFunction}
-            style={styles.category_View}
-          >
-            <Text style={styles.category_Text}>{this.props.item.name} </Text>
-            <Image
-              source={{
-                uri:
-                  "https://reactnativecode.com/wp-content/uploads/2019/02/arrow_right_icon.png",
-              }}
-              style={styles.iconStyle}
-            />
-          </TouchableOpacity>
-          <View style={{ height: layout_height, overflow: "hidden" }}>
-            {this.props.item.children.map((item, key) => (
-              <TouchableOpacity
-                key={key}
-                style={styles.sub_Category_Text}
-                onPress={this.show_Selected_Category.bind(this, item.name)}
-              >
-                <Text> {item.name} </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </CardView>
+          <Text style={styles.category_Text}>{this.props.item.name} </Text>
+          <Image
+            source={{
+              uri:
+                "https://reactnativecode.com/wp-content/uploads/2019/02/arrow_right_icon.png",
+            }}
+            style={styles.iconStyle}
+          />
+        </TouchableOpacity>
+        <View style={{ height: layout_height, overflow: "hidden" }}>
+          {this.props.item.children.map((item, key) => (
+            <TouchableOpacity
+              key={key}
+              style={styles.sub_Category_Text}
+              onPress={this.show_Selected_Category.bind(this, item.name)}
+            >
+              <Text> {item.name} </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+        {/* </CardView> */}
       </View>
     );
   }
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   MainContainer: {
     flex: 1,
     justifyContent: "center",
-    paddingTop: Platform.OS === "ios" ? 20 : 0,
+    //paddingTop: Platform.OS === "ios" ? 20 : 0,
     backgroundColor: "#fcfcfc",
     paddingBottom: 10,
   },

@@ -3,7 +3,7 @@ import { View, Text } from "react-native";
 import { AppLoading } from "expo";
 import * as Location from "expo-location";
 const API_KEY_DUST =
-  "Q7i8kskl65jQJuAAJfc3OZ5T5vDFgfQf8YYuQfp50spzizAQZGgVTZmnMMnvIP4W8vp81SgBQJaxo2YzvyIbHA%3D%3D";
+  "B0vbIBkSPkpTw3LPW5N04WumIkhmqwUEAHrl04sVHPbKEbtHh7xAaA%2BpuOgdnnQELW1p5f33f%2F9OLTfFmwYasw%3D%3D";
 
 const API_KEY_WEATHER = "56d46ed5370593a0133551e8f0ee8900";
 //openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?stationName=%EC%A2%85%EB%A1%9C%EA%B5%AC&dataTerm=month&pageNo=1&numOfRows=10&ServiceKey=Q7i8kskl65jQJuAAJfc3OZ5T5vDFgfQf8YYuQfp50spzizAQZGgVTZmnMMnvIP4W8vp81SgBQJaxo2YzvyIbHA%3D%3D&ver=1.3&_returnType=json
@@ -51,6 +51,17 @@ export default class Weather extends Component {
     console.log(accessToken);
     console.log(this.state.longitude + " " + this.state.latitude);
     let url = `${API_TRAD}?accessToken=${accessToken}&src=${WGS84}&dst=${GRS80}&posX=${this.state.longitude}&posY=${this.state.latitude}`;
+    console.log(url);
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data.result.posX + " " + data.result.posY);
+        this._getClosePosition(data.result.posX, data.result.posY);
+      });
+  };
+  _getClosePosition = (posX, posY) => {
+    console.log(posX, posY);
+    let url = `http://openapi.airkorea.or.kr/openapi/services/rest/MsrstnInfoInqireSvc/getNearbyMsrstnList?tmX=${posX}&tmY=${posY}&ServiceKey=${API_KEY_DUST}`;
     console.log(url);
     fetch(url)
       .then((response) => response.json())
