@@ -7,7 +7,7 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-//import CardView from "react-native-cardview";
+// import CardView from "react-native-cardview";
 
 class ExpandableCardView extends Component {
   constructor(props) {
@@ -47,7 +47,7 @@ class ExpandableCardView extends Component {
             style={styles.iconStyle}
           />
         </TouchableOpacity>
-        <View style={{ overflow: "hidden" }}>
+        <View style={{ height: layout_height, overflow: "hidden" }}>
           {this.props.item.children.map((item, key) => (
             <TouchableOpacity
               key={key}
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   MainContainer: {
     flex: 1,
     justifyContent: "center",
-    // paddingTop: Platform.OS === "ios" ? 20 : 0,
+    //paddingTop: Platform.OS === "ios" ? 20 : 0,
     backgroundColor: "#fcfcfc",
     paddingBottom: 10,
   },
