@@ -2,6 +2,8 @@ import React from "react";
 
 import { StyleSheet, View, Text } from "react-native";
 
+import Weather from "../component/Weather";
+
 export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -14,6 +16,7 @@ export default class HomeScreen extends React.Component {
           style={{ justifyContent: "center", alignItems: "center", flex: 1 }}
         >
           <Text>Home</Text>
+          <Weather></Weather>
         </View>
       </View>
     );
