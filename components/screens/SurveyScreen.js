@@ -50,9 +50,9 @@ class SurveyScreen extends React.Component {
   };
 
   //SurveyScreen2(routeName:Survey_step2 로 네비게이팅)
-  _goToNextStep(id) {
+  _goToNextStep(degree_id) {
     this.props.navigation.navigate("Survey_step2", {
-      degree_id: id,
+      degree_id: degree_id,
     });
 
     /*

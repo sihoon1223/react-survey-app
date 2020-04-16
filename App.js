@@ -7,9 +7,11 @@ import { View, Text, StyleSheet } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 import HomeScreen from "./components/screens/HomeScreen";
-import SurveyScreen from "./components/screens/SurveyScreen";
 import SettingScreen from "./components/screens/SettingScreen";
-import DetailScreen from "./components/screens/DetailScreen";
+import SurveyScreen from "./components/screens/SurveyScreen";
+import SurveyScreen2 from "./components/screens/SurveyScreen2";
+import SurveyScreen3 from "./components/screens/SurveyScreen3";
+import SurveyScreen4 from "./components/screens/SurveyScreen4";
 
 // 헤더를 세팅한 후 반환
 const Header = (props) => {
@@ -38,13 +40,19 @@ const App = createStackNavigator(
       }),
     },
     Survey_step2: {
-      screen: DetailScreen,
+      screen: SurveyScreen2,
       navigationOptions: ({ navigation }) => ({
         // headerTitle: () => {
         //   const routeName = navigation.state.routeName;
         //   return <Header title={routeName} />;
         // },
       }),
+    },
+    Survey_step3: {
+      screen: SurveyScreen3,
+    },
+    Survey_step4: {
+      screen: SurveyScreen4,
     },
   },
   {

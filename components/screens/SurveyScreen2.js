@@ -1,36 +1,36 @@
 import React, { Component } from "react";
-import {
-  LayoutAnimation,
-  StyleSheet,
-  View,
-  Text,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, View, Text, ScrollView } from "react-native";
 
-import ExpandableCardView from "../component/ExpandableCardView";
+import Accordian from "../component/Accordian";
 
-export default class DetailScreen extends Component {
+export default class SurveyScreen2 extends Component {
   constructor(props) {
     super(props);
     this.state = {
       degree_id: this.props.navigation.state.params.degree_id, //설문조사 회차 id
+      dept_id: null,
       surveyDatas: [], //본부별로 저장
-      expanded: false,
+      activeSections: [],
     };
+
+    this._changeFromChild = this._changeFromChild.bind(this);
   }
 
-  _updateLayout = (index) => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+  //자식에게서 값을 받아와 상태변경
+  _changeFromChild(id) {
+    this.setState = {
+      dept_id: id,
+    };
+    this._goToNextStep();
+  }
 
-    const array = [...this.state.surveyDatas];
-    array[index]["expanded"] = !array[index]["expanded"];
-
-    this.setState(() => {
-      return {
-        surveyDatas: array,
-      };
+  //SurveyScreen3(routeName:Survey_step3 로 네비게이팅)
+  _goToNextStep() {
+    this.props.navigation.navigate("Survey_step3", {
+      degree_id: this.state.degree_id,
+      dept_id: this.state.dept_id,
     });
-  };
+  }
 
   _getSurveyData = async () => {
     const url = new URL("http://61.73.147.176/api/v1/department");
@@ -41,12 +41,27 @@ export default class DetailScreen extends Component {
       this.setState({
         surveyDatas: responseJson,
       });
-    } catch (error) {}
+    } catch (error) {
+      console.error("_getSurveyData", error);
+    }
   };
 
   componentDidMount() {
     this._getSurveyData();
   }
+
+  renderAccordians = (item) => {
+    const items = [];
+    items.push(
+      <Accordian
+        title={item.name}
+        data={item}
+        key={item.id}
+        changeFromChild={this._changeFromChild}
+      />
+    );
+    return items;
+  };
 
   render() {
     return (
@@ -60,13 +75,14 @@ export default class DetailScreen extends Component {
               paddingVertical: 5,
             }}
           >
-            {this.state.surveyDatas.map((item, key) => (
-              <ExpandableCardView
+            {this.state.surveyDatas.map((item, key) =>
+              /*<ExpandableCardView
                 key={item.id}
-                onClickFunction={this._updateLayout.bind(this, key)}
+                // onClickFunction={this._updateLayout.bind(this, key)}
                 item={item}
-              />
-            ))}
+              />*/
+              this.renderAccordians(item)
+            )}
           </ScrollView>
         </View>
       </View>
