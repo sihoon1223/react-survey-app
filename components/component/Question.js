@@ -24,8 +24,9 @@ export default class Question extends Component {
         </RadioButton>
       );
     });
-    console.log(this.state.onChange);
+
     return (
+      // this.state.onSelect(this.state.id, value);
       <View>
         <View style={styles.titleView}>
           <Text>{this.state.question}</Text>
@@ -34,6 +35,7 @@ export default class Question extends Component {
         <RadioGroup
           color="#9575b2"
           highlightColor="#ccc8b9"
+          selectedIndex={0}
           onSelect={(value) => this.state.onSelect(this.state.id, value)}
         >
           {radioButtons}

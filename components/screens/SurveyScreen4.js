@@ -1,9 +1,15 @@
 import React, { Component } from "react";
 
-import { StyleSheet, Text, View, Button } from "react-native";
-import { FlatList, TextInput } from "react-native-gesture-handler";
+import {
+  FlatList,
+  TextInput,
+  StyleSheet,
+  Text,
+  View,
+  Button,
+} from "react-native";
+
 import Question from "../component/Question";
-import { ListItem, Input } from "react-native-elements";
 
 export default class SurveyScreen4 extends Component {
   constructor(props) {
@@ -14,6 +20,7 @@ export default class SurveyScreen4 extends Component {
       refreshing: false,
       QuestionDatas: "",
       AnswerDatas: [],
+      otherComment: "",
     };
   }
 
@@ -76,7 +83,40 @@ export default class SurveyScreen4 extends Component {
       );
     }
   };
-  _submitAction = () => {};
+  _submitAction = async () => {
+    const url = new URL("http://localhost/api/v1/survey");
+
+    let headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    var mergeJSON = require("merge-json");
+    var ans = {
+      [`ans-${questionId}`]: this.state.otherComment,
+    };
+    this.state.AnswerDatas = mergeJSON.merge(this.state.AnswerDatas, ans);
+
+    let body = {
+      degree_id: this.state.degree_id,
+      department_id: this.state.department_id,
+      service_id: this.state.service_id,
+      "ans-*": this.state.AnswerDatas,
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: headers,
+        body: body,
+      });
+      const responseJson = response.json();
+      console.log(responseJson);
+      // .then((response) => response.json())
+      // .then((json) => console.log(json));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   render() {
     //this._getSurveyQuestionList();
@@ -102,7 +142,20 @@ export default class SurveyScreen4 extends Component {
         </View>
         <View style={styles.bottom}>
           <Text>기타의견</Text>
-          <TextInput style={styles.inputArea}></TextInput>
+          <TextInput
+            placeholder="기타의견"
+            placeholderTextColor="grey"
+            blurOnSubmit={false}
+            mulitline={true}
+            numberOfLines={10}
+            onChange={(event) => {
+              this.nativeEvent = event.nativeEvent;
+            }}
+            onChangeText={(text) => {
+              this.state.otherComment = text;
+            }}
+            style={styles.inputArea}
+          ></TextInput>
         </View>
         <Button onPress={this._submitAction} title="제출하기"></Button>
       </View>
@@ -134,8 +187,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   inputArea: {
+    justifyContent: "flex-start",
     height: "80%",
     borderColor: "green",
     borderWidth: 1,
+    textAlignVertical: "top",
   },
 });
