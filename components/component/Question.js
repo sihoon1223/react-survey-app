@@ -17,16 +17,16 @@ export default class Question extends Component {
 
   render() {
     const radioButtons = [];
-    this.state.children.map((item) => {
+    this.state.children.map((item, index) => {
       radioButtons.push(
-        <RadioButton value={item.id}>
+        <RadioButton key={index} value={item.id}>
           <Text>{item.description}</Text>
         </RadioButton>
       );
     });
-
+    console.log(radioButtons[0].props.value);
+    this.state.onSelect(this.state.id, radioButtons[0].props.value);
     return (
-      // this.state.onSelect(this.state.id, value);
       <View>
         <View style={styles.titleView}>
           <Text>{this.state.question}</Text>

@@ -92,7 +92,7 @@ export default class SurveyScreen4 extends Component {
     };
     var mergeJSON = require("merge-json");
     var ans = {
-      [`ans-${questionId}`]: this.state.otherComment,
+      [`ans-other`]: this.state.otherComment,
     };
     this.state.AnswerDatas = mergeJSON.merge(this.state.AnswerDatas, ans);
 
@@ -143,14 +143,41 @@ export default class SurveyScreen4 extends Component {
         <View style={styles.bottom}>
           <Text>기타의견</Text>
           <TextInput
-            placeholder="기타의견"
-            placeholderTextColor="grey"
-            blurOnSubmit={false}
-            mulitline={true}
-            numberOfLines={10}
-            onChange={(event) => {
-              this.nativeEvent = event.nativeEvent;
+            value={this.state.query}
+            selection={this.state.selection}
+            onSelectionChange={(event) =>
+              this.setState({
+                cursorPosition: event.nativeEvent.selection,
+                selection: event.nativeEvent.selection,
+                allowEditing: true,
+              })
+            }
+            onSubmitEditing={() => {
+              const { query, cursorPosition } = this.state;
+              let newText = query;
+              const ar = newText.split("");
+              ar.splice(cursorPosition.start, 0, "\n");
+              newText = ar.join("");
+              if (
+                cursorPosition.start === query.length &&
+                query.endsWith("\n")
+              ) {
+                this.setState({ query: newText });
+              } else if (this.state.allowEditing) {
+                this.setState({
+                  query: newText,
+                  selection: {
+                    start: cursorPosition.start + 1,
+                    end: cursorPosition.end + 1,
+                  },
+                  allowEditing: !this.state.allowEditing,
+                });
+              }
             }}
+            multiline={true}
+            numberOfLines={10}
+            blurOnSubmit={false}
+            editable={true}
             onChangeText={(text) => {
               this.state.otherComment = text;
             }}
