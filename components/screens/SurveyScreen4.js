@@ -1,9 +1,15 @@
 import React, { Component } from "react";
 
-import { StyleSheet, Text, View, Button } from "react-native";
-import { FlatList, TextInput } from "react-native-gesture-handler";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  FlatList,
+  TextInput,
+} from "react-native";
+// import { TextInput } from "react-native-gesture-handler";
 import Question from "../component/Question";
-import { ListItem, Input } from "react-native-elements";
 
 export default class SurveyScreen4 extends Component {
   constructor(props) {
@@ -15,6 +21,14 @@ export default class SurveyScreen4 extends Component {
       QuestionDatas: "",
       AnswerDatas: [],
     };
+    console.log(
+      "degree_id",
+      this.props.navigation.state.params.degree_id,
+      "dept_id",
+      this.props.navigation.state.params.dept_id,
+      "service_id",
+      this.props.navigation.state.params.service_id
+    );
   }
 
   componentDidMount() {

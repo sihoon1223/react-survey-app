@@ -17,9 +17,9 @@ export default class Question extends Component {
 
   render() {
     const radioButtons = [];
-    this.state.children.map((item) => {
+    this.state.children.map((item, key) => {
       radioButtons.push(
-        <RadioButton value={item.id}>
+        <RadioButton value={item.id} key={key}>
           <Text>{item.description}</Text>
         </RadioButton>
       );

@@ -21,12 +21,10 @@ export default class SurveyScreen2 extends Component {
   }
 
   //자식에게서 값을 받아와 상태변경
-  _changeFromChild(id) {
-    this.setState = {
-      dept_id: id,
-    };
+  _changeFromChild = (id) => {
+    this.state.dept_id = id;
     this._goToNextStep();
-  }
+  };
 
   _dataFromChild = (datas) => {
     //콜백메서드 등록
