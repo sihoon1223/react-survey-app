@@ -5,6 +5,7 @@ import {
   View,
   Text,
   FlatList,
+  Alert,
 } from "react-native";
 import Constants from "expo-constants";
 
@@ -51,12 +52,8 @@ class SurveyScreen extends React.Component {
     }));
   };
 
-  //SurveyScreen2(routeName:Survey_step2 로 네비게이팅)
-  _goToNextStep(degree_id) {
-    this.props.navigation.navigate("Survey_step2", {
-      degree_id: degree_id,
-    });
-
+  //설문조사의 상태 (진행중,준비중,완료) 중 진행중일 경우를 확인한 후 SurveyScreen2(routeName:Survey_step2 로 네비게이팅)
+  _goToNextStep(degree_id, period) {
     /*
     예시 
     this.props.navigation.replace("TabNavigator");
@@ -64,6 +61,15 @@ class SurveyScreen extends React.Component {
       greeting: "Hallo",
     });
     */
+    if (period == "ING") {
+      this.props.navigation.navigate("Survey_step2", {
+        degree_id: degree_id,
+      });
+    } else if (period == "BEFORE") {
+      Alert.alert("알림", "투표가 준비중입니다.");
+    } else {
+      Alert.alert("알림", "이미 종료된 투표입니다.");
+    }
   }
 
   _renderItem = ({ item }) => {
@@ -71,7 +77,7 @@ class SurveyScreen extends React.Component {
 
     return (
       // 터치 가능하게 하기
-      <TouchableOpacity onPress={() => this._goToNextStep(id)}>
+      <TouchableOpacity onPress={() => this._goToNextStep(id, period)}>
         <SurveyItem
           key={id}
           id={id}
@@ -85,7 +91,6 @@ class SurveyScreen extends React.Component {
   };
 
   render() {
-    console.log("SurveyScreen/render");
     return (
       <View style={styles.container}>
         <Text style={styles.title}>설문조사</Text>

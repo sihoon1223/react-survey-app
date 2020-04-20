@@ -9,6 +9,11 @@ import {
   Button,
 } from "react-native";
 
+//   FlatList,
+//   TextInput,
+//   ScrollView,
+// } from "react-native";
+// import { TextInput } from "react-native-gesture-handler";
 import Question from "../component/Question";
 
 export default class SurveyScreen4 extends Component {
@@ -22,6 +27,14 @@ export default class SurveyScreen4 extends Component {
       AnswerDatas: [],
       otherComment: "",
     };
+    console.log(
+      "degree_id",
+      this.props.navigation.state.params.degree_id,
+      "dept_id",
+      this.props.navigation.state.params.dept_id,
+      "service_id",
+      this.props.navigation.state.params.service_id
+    );
   }
 
   componentDidMount() {
@@ -40,16 +53,6 @@ export default class SurveyScreen4 extends Component {
     } catch (error) {
       console.error("_getSurveyQuestionList", error);
     }
-    /*
-    await fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState = {
-          QuestionDatas: data,
-        };
-        console.log(data);
-        console.log(this.state.QuestionDatas);
-      });*/
   };
 
   onRefresh = () => {
@@ -70,7 +73,7 @@ export default class SurveyScreen4 extends Component {
     // console.log(id);
     if (type === "radio") {
       return (
-        <View style={styles.questionGroup}>
+        <View>
           <Question
             id={id}
             degree_id={degree_id}
@@ -123,41 +126,31 @@ export default class SurveyScreen4 extends Component {
     // console.log("start");
     return (
       <View style={styles.container}>
-        <View style={styles.title}>
-          <Text>설문조사</Text>
-        </View>
-        <View style={styles.title}>
-          <Text>Step4. 설문 답변을 입력해주세요.</Text>
-        </View>
-        <View style={styles.questionArea}>
-          <FlatList
-            data={this.state.QuestionDatas}
-            keyExtractor={(item, index) => index.toString()}
-            initialNumToRender={20}
-            onEndReachedThreshold={1}
-            refreshing={this.state.refreshing}
-            onRefresh={this.onRefresh}
-            renderItem={this._renderQuestion}
-          />
-        </View>
-        <View style={styles.bottom}>
-          <Text>기타의견</Text>
-          <TextInput
-            placeholder="기타의견"
-            placeholderTextColor="grey"
-            blurOnSubmit={false}
-            mulitline={true}
-            numberOfLines={10}
-            onChange={(event) => {
-              this.nativeEvent = event.nativeEvent;
+        <Text style={styles.title}>설문조사</Text>
+        <View style={styles.survey_container}>
+          <Text style={styles.text}>Step4. 설문 답변을 입력해주세요.</Text>
+          <ScrollView
+            contentContainerStyle={{
+              paddingHorizontal: 10,
+              paddingVertical: 10,
             }}
-            onChangeText={(text) => {
-              this.state.otherComment = text;
-            }}
-            style={styles.inputArea}
-          ></TextInput>
+          >
+            <FlatList
+              data={this.state.QuestionDatas}
+              keyExtractor={(item, index) => index.toString()}
+              initialNumToRender={20}
+              onEndReachedThreshold={1}
+              refreshing={this.state.refreshing}
+              onRefresh={this.onRefresh}
+              renderItem={this._renderQuestion}
+            />
+            <View style={{ paddingBottom: 20 }}>
+              <Text style={styles.opinion}>기타의견</Text>
+              <TextInput style={styles.inputArea}></TextInput>
+            </View>
+            <Button onPress={this._submitAction} title="제출하기" />
+          </ScrollView>
         </View>
-        <Button onPress={this._submitAction} title="제출하기"></Button>
       </View>
     );
   }
@@ -165,31 +158,33 @@ export default class SurveyScreen4 extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    width: "95%",
+    width: "100%",
     flex: 1,
     flexDirection: "column",
     backgroundColor: "#fcfcfc",
   },
-  title: {
-    marginBottom: 5,
-  },
-  bottom: {
+  survey_container: {
     flex: 1,
+    height: 100,
+    padding: "5%",
   },
-  questionArea: {
-    flex: 4,
+  title: {
+    fontSize: 20,
+    paddingTop: "5%",
+    paddingLeft: "5%",
+    fontWeight: "bold",
   },
-
-  questionGroup: {
-    backgroundColor: "#F8F8FF",
-    borderBottomColor: "gray",
-    borderBottomWidth: 1,
-    marginBottom: 10,
+  text: {
+    paddingBottom: 10,
+  },
+  opinion: {
+    fontWeight: "bold",
+    marginTop: 10,
   },
   inputArea: {
-    justifyContent: "flex-start",
-    height: "80%",
-    borderColor: "green",
+    marginTop: 10,
+    height: 100,
+    borderColor: "gray",
     borderWidth: 1,
     textAlignVertical: "top",
   },
