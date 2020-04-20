@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { RadioGroup, RadioButton } from "react-native-flexi-radio-button";
 import { StyleSheet, Text, View } from "react-native";
-import { ThemeConsumer } from "react-native-elements";
 
 export default class Question extends Component {
   constructor(props) {
@@ -17,10 +16,12 @@ export default class Question extends Component {
 
   render() {
     const radioButtons = [];
-    this.state.children.map((item, index) => {
+    this.state.children.map((item, key) => {
       radioButtons.push(
-        <RadioButton key={index} value={item.id}>
-          <Text>{item.description}</Text>
+        <RadioButton style={styles.radio_button} value={item.id} key={key}>
+          <View style={styles.radio_button_text_container}>
+            <Text style={styles.radio_button_text}>{item.description}</Text>
+          </View>
         </RadioButton>
       );
     });
@@ -28,15 +29,15 @@ export default class Question extends Component {
     this.state.onSelect(this.state.id, radioButtons[0].props.value);
     return (
       <View>
-        <View style={styles.titleView}>
-          <Text>{this.state.question}</Text>
+        <View style={styles.title_container}>
+          <Text style={styles.title_text}>{this.state.question}</Text>
         </View>
-
         <RadioGroup
           color="#9575b2"
           highlightColor="#ccc8b9"
           selectedIndex={0}
           onSelect={(value) => this.state.onSelect(this.state.id, value)}
+          style={styles.radio_group}
         >
           {radioButtons}
         </RadioGroup>
@@ -46,10 +47,34 @@ export default class Question extends Component {
 }
 
 const styles = StyleSheet.create({
-  titleView: {
-    borderBottomWidth: 1,
-    borderTopWidth: 2,
+  title_container: {
+    marginTop: 10,
+    borderBottomWidth: 1.5,
+    borderTopWidth: 1.5,
     borderBottomColor: "gray",
-    borderTopColor: "blue",
+    borderTopColor: "gray",
+  },
+  title_text: {
+    margin: 5,
+    fontWeight: "bold",
+    fontSize: 15,
+  },
+  radio_group: {
+    marginTop: 5,
+    marginBottom: 5,
+  },
+  radio_button: {
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  radio_button_text: {
+    fontSize: 13.5,
+    width: "95%",
+  },
+  radio_button_text_container: {
+    flexWrap: "wrap",
+    flexDirection: "row",
+    justifyContent: "center",
   },
 });

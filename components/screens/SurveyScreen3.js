@@ -23,9 +23,7 @@ class SurveyScreen3 extends React.Component {
 
   //자식에게서 값을 받아와 상태변경
   _changeFromChild(id) {
-    this.setState = {
-      service_id: id,
-    };
+    this.state.service_id = id;
     this._goToNextStep();
   }
 

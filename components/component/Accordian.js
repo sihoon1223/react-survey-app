@@ -40,7 +40,7 @@ export default class Accordian extends Component {
                 activeOpacity={0.8}
                 key={key}
                 // onPress={this._goToNextStep.bind(this, item.name)}
-                onPress={this._changeToParent.bind(this, item.name)}
+                onPress={this._changeToParent.bind(this, item.id)}
               >
                 <View style={styles.child} key={key}>
                   <Text style={styles.child_name}>{item.name}</Text>

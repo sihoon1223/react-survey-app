@@ -1,7 +1,12 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Badge } from "react-native-elements";
+import { Badge, ThemeProvider } from "react-native-elements";
 
+const theme = {
+  colors: {
+    primary: "gray",
+  },
+};
 class SurveyItem extends React.Component {
   /*
   TODO: 받아온 데이터의 요소들을 prop을 통해 사용할 것인지, state에 저장할 것인지 추후 결정 필요
@@ -57,11 +62,14 @@ class SurveyItem extends React.Component {
         </View>
 
         <View style={styles.survey_status_area}>
-          <Badge
-            badgeStyle={styles.survey_status_badge}
-            status="success"
-            value={this._checkSurveyPeriod()}
-          />
+          <ThemeProvider theme={theme}>
+            <Badge
+              badgeStyle={styles.survey_status_badge}
+              status="primary"
+              value={this._checkSurveyPeriod()}
+            />
+            {this._checkSurveyPeriod}
+          </ThemeProvider>
         </View>
       </View>
     );
@@ -103,6 +111,7 @@ const styles = StyleSheet.create({
   },
   survey_status_badge: {
     marginLeft: 20,
+    width: 45,
     height: 23,
   },
   survey_status_badge_ing: {
@@ -119,7 +128,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     padding: 5,
     color: "white",
-    backgroundColor: "#f26531",
+    backgroundColor: "#48a0f3",
     borderRadius: 8,
     overflow: "hidden",
   },
@@ -128,7 +137,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     padding: 5,
     color: "white",
-    backgroundColor: "#5b5b5b",
     borderRadius: 8,
     overflow: "hidden",
   },
