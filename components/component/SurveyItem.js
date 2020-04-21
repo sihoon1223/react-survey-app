@@ -67,8 +67,9 @@ class SurveyItem extends React.Component {
               badgeStyle={styles.survey_status_badge}
               status="primary"
               value={this._checkSurveyPeriod()}
-            />
-            {this._checkSurveyPeriod}
+            >
+              {this._checkSurveyPeriod}
+            </Badge>
           </ThemeProvider>
         </View>
       </View>

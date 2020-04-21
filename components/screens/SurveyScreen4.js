@@ -14,6 +14,8 @@ import {
 //   ScrollView,
 // } from "react-native";
 // import { TextInput } from "react-native-gesture-handler";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 import Question from "../component/Question";
 
 export default class SurveyScreen4 extends Component {
@@ -27,14 +29,6 @@ export default class SurveyScreen4 extends Component {
       AnswerDatas: [],
       otherComment: "",
     };
-    console.log(
-      "degree_id",
-      this.props.navigation.state.params.degree_id,
-      "dept_id",
-      this.props.navigation.state.params.dept_id,
-      "service_id",
-      this.props.navigation.state.params.service_id
-    );
   }
 
   componentDidMount() {
@@ -65,12 +59,11 @@ export default class SurveyScreen4 extends Component {
       [`ans-${questionId}`]: value,
     };
     this.state.AnswerDatas = mergeJSON.merge(this.state.AnswerDatas, ans);
-    console.log(this.state.AnswerDatas);
   };
 
   _renderQuestion = ({ item }) => {
     const { id, degree_id, type, question, children } = item;
-    // console.log(id);
+
     if (type === "radio") {
       return (
         <View>
@@ -122,34 +115,54 @@ export default class SurveyScreen4 extends Component {
   };
 
   render() {
-    //this._getSurveyQuestionList();
-    // console.log("start");
     return (
       <View style={styles.container}>
         <Text style={styles.title}>설문조사</Text>
         <View style={styles.survey_container}>
           <Text style={styles.text}>Step4. 설문 답변을 입력해주세요.</Text>
-          <ScrollView
+          <KeyboardAwareScrollView
             contentContainerStyle={{
-              paddingHorizontal: 10,
-              paddingVertical: 10,
+              flex: 1,
+              justifyContent: "space-around",
+              alignItems: "center",
+              width: null,
+              height: null,
             }}
           >
-            <FlatList
-              data={this.state.QuestionDatas}
-              keyExtractor={(item, index) => index.toString()}
-              initialNumToRender={20}
-              onEndReachedThreshold={1}
-              refreshing={this.state.refreshing}
-              onRefresh={this.onRefresh}
-              renderItem={this._renderQuestion}
-            />
-            <View style={{ paddingBottom: 20 }}>
-              <Text style={styles.opinion}>기타의견</Text>
-              <TextInput style={styles.inputArea}></TextInput>
-            </View>
-            <Button onPress={this._submitAction} title="제출하기" />
-          </ScrollView>
+            <ScrollView
+              contentContainerStyle={{
+                paddingHorizontal: 10,
+                paddingVertical: 10,
+              }}
+            >
+              <FlatList
+                data={this.state.QuestionDatas}
+                keyExtractor={(item, index) => index.toString()}
+                initialNumToRender={20}
+                onEndReachedThreshold={1}
+                refreshing={this.state.refreshing}
+                onRefresh={this.onRefresh}
+                renderItem={this._renderQuestion}
+              />
+
+              <View
+                style={{
+                  paddingBottom: 20,
+                }}
+              >
+                <Text style={styles.opinion}>기타의견</Text>
+                <TextInput
+                  style={styles.inputArea}
+                  placeholder="기타의견을 작성해주세요."
+                  keyboardType="default"
+                  multiline
+                  blurOnSubmit={false}
+                  returnKeyType="done"
+                />
+              </View>
+              <Button onPress={this._submitAction} title="제출하기" />
+            </ScrollView>
+          </KeyboardAwareScrollView>
         </View>
       </View>
     );

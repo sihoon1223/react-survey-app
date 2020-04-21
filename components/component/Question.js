@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   },
   radio_button: {
     height: 50,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   radio_button_text: {
@@ -73,6 +73,8 @@ const styles = StyleSheet.create({
     width: "95%",
   },
   radio_button_text_container: {
+    // flex: 1,
+    // // width: "100%",
     flexWrap: "wrap",
     flexDirection: "row",
     justifyContent: "center",
