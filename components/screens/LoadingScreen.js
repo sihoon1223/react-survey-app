@@ -1,21 +1,27 @@
 import React from "react";
-import { StyleSheet, Text, View, StatusBar } from "react-native";
+import { StyleSheet, Text, View, StatusBar, Platform } from "react-native";
 import AnimatedLoader from "react-native-animated-loader";
 
 // npm install react-native-animated-loader
 // npm install lottie-react-native;
 // react-native link lottie-react-native
 export default function loading() {
-  return (
+  console.log(Platform.OS);
+  return Platform.OS === "web" ? (
+    <View>
+      <Text style={styles.text}>Loading</Text>
+    </View>
+  ) : (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      {/*  <Text style={styles.text}>Loading</Text>*/}
+      {/*  */}
       {
         <AnimatedLoader
           visible={true}
           overlayColor="rgba(255,255,255,0.75)"
           animationStyle={styles.lottie}
           speed={1}
+          source={require("../../loadicon/19869-heart-notifications.json")}
         ></AnimatedLoader>
       }
     </View>
