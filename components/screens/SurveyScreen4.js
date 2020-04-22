@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import {
+  ListView,
   FlatList,
   TextInput,
   StyleSheet,
@@ -15,6 +16,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import Question from "../component/Question";
 import LoadingScreen from "./LoadingScreen";
 
+const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 export default class SurveyScreen4 extends Component {
   constructor(props) {
     super(props);
@@ -23,6 +25,7 @@ export default class SurveyScreen4 extends Component {
       isLoading: true,
       refreshing: false,
       QuestionDatas: "",
+      dataSource: [],
       AnswerDatas: [],
       otherComment: "",
       degree_id: this.props.navigation.state.params.degree_id,
@@ -50,6 +53,7 @@ export default class SurveyScreen4 extends Component {
     setTimeout(() => {
       this.setState({ isLoading: false });
     }, 3000);
+    console.log(QuestionDatas);
   };
 
   onRefresh = () => {
@@ -192,7 +196,11 @@ export default class SurveyScreen4 extends Component {
                 paddingVertical: 10,
               }}
             >
-              <FlatList
+              <ListView
+                dataSource={this.state.dataSource}
+                renderRow={(item) => this._renderQuestion(item)}
+              ></ListView>
+              {/* <FlatList
                 data={this.state.QuestionDatas}
                 keyExtractor={(item, index) => index.toString()}
                 initialNumToRender={20}
@@ -200,7 +208,7 @@ export default class SurveyScreen4 extends Component {
                 refreshing={this.state.refreshing}
                 onRefresh={this.onRefresh}
                 renderItem={this._renderQuestion}
-              />
+              /> */}
 
               <View
                 style={{
