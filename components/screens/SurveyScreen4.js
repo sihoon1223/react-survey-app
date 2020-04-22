@@ -1,17 +1,16 @@
 import React, { Component } from "react";
 
 import {
-  FlatList,
-  TextInput,
   StyleSheet,
   Text,
   View,
   Button,
+  FlatList,
+  TextInput,
   ScrollView,
-  Dimensions,
-  Constants,
+  findNodeHandle,
 } from "react-native";
-
+// import { TextInput } from "react-native-gesture-handler";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import Question from "../component/Question";
@@ -19,18 +18,12 @@ import Question from "../component/Question";
 export default class SurveyScreen4 extends Component {
   constructor(props) {
     super(props);
-    this.myRef = React.createRef();
-    this.onInputFocus = this.onInputFocus.bind(this);
     // this._getSurveyQuestionList();
     this.state = {
       isLoading: false,
       refreshing: false,
       QuestionDatas: "",
       AnswerDatas: [],
-      otherComment: "",
-      degree_id: this.props.navigation.state.params.degree_id,
-      department_id: this.props.navigation.state.params.dept_id,
-      service_id: this.props.navigation.state.params.service_id,
     };
   }
 
@@ -82,105 +75,22 @@ export default class SurveyScreen4 extends Component {
       );
     }
   };
-  _submitAction = async () => {
-    const url = new URL("http://210.181.192.195:8000/api/v1/survey");
 
-    let headers = {
-      // "Content-Type": "application/json",
-      "Content-Type": "application/x-www-form-urlencoded",
-      Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    };
-    var mergeJSON = require("merge-json");
-    if (this.state.otherComment !== "") {
-      var ans = {
-        [`memo`]: this.state.otherComment,
-      };
-      this.state.AnswerDatas = mergeJSON.merge(this.state.AnswerDatas, ans);
-    }
-
-    // console.log(this.state.AnswerDatas);
-
-    // for (let item in this.state.AnswerDatas) {
-    //   console.log(this.state.AnswerDatas[item]);
-    // }
-
-    // this.state.AnswerDatas.map((item, key) => {
-    //   console.log(item);
-    // });
-    // this.state.AnswerDatas.map((item, key) => {});
-
-    // for (let i = 0; i < this.state.AnswerDatas.length; i++) {
-    //   console.log(this.state.AnswerDatas[i]);
-    // }
-
-    let body = {
-      degree_id: this.state.degree_id,
-      department_id: this.state.department_id,
-      service_id: this.state.service_id,
-      // "ans-*": this.state.AnswerDatas,
-    };
-    console.log(body);
-    body = mergeJSON.merge(body, this.state.AnswerDatas);
-    console.log(body);
-
-    // fetch(url, {
-    //   method: "POST",
-    //   headers: headers,
-    //   body: body,
-    //   //mode: "no-cors",
-    // })
-    //   .then(function (response) {
-    //     if (!response.ok) {
-    //       console.log(response);
-    //       throw Error(response);
-    //     }
-    //     return response;
-    //   })
-    //   .then(function (response) {
-    //     console.log("ok");
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
-
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: headers,
-        body: body,
-      });
-      const responseJson = response.json();
-      console.log(responseJson);
-      // .then((response) => response.json())
-      // .then((json) => console.log(json));
-
-      alert("설문조사가 완료되었습니다.");
-      this.props.navigation.replace("Survey_step1");
-    } catch (error) {
-      console.log(error);
-      alert("설문 저장 도중 오류가 발생하였습니다. 관리자에게 문의해주세요.");
+  _handleKeyDown = (e) => {
+    if (e.nativeEvent.key == "Enter") {
+      //dismissKeyboard();
+      // Keyboard.dismiss();
     }
   };
-  _blurTextInput = () => {
-    const height = Dimensions.get("window").height;
-    console.log("ddd,", height);
-    // this.myRef.scrollToEnd({ animated: true });
-    this.myRef.scrollToEnd();
-  };
-  onInputFocus = () => {
-    this.myRef.scrollToEnd();
-  };
+  _submitAction = () => {};
+
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>설문조사</Text>
         <View style={styles.survey_container}>
           <Text style={styles.text}>Step4. 설문 답변을 입력해주세요.</Text>
-          {/* <KeyboardAwareScrollView
-            style={{ color: "red" }}
-            ref={(ref) => {
-              this.myRef = ref;
-            }}
+          <KeyboardAwareScrollView
             contentContainerStyle={{
               flex: 1,
               justifyContent: "space-around",
@@ -188,42 +98,42 @@ export default class SurveyScreen4 extends Component {
               width: null,
               height: null,
             }}
-          > */}
-          <ScrollView
-            contentContainerStyle={{
-              paddingHorizontal: 10,
-              paddingVertical: 10,
-            }}
           >
-            <FlatList
-              data={this.state.QuestionDatas}
-              keyExtractor={(item, index) => index.toString()}
-              initialNumToRender={20}
-              onEndReachedThreshold={1}
-              refreshing={this.state.refreshing}
-              onRefresh={this.onRefresh}
-              renderItem={this._renderQuestion}
-            />
-
-            <View
-              style={{
-                paddingBottom: 20,
+            <ScrollView
+              indicatorStyle="red"
+              contentContainerStyle={{
+                paddingHorizontal: 10,
+                paddingVertical: 10,
               }}
             >
-              <Text style={styles.opinion}>기타의견</Text>
-              <TextInput
-                style={styles.inputArea}
-                placeholder="기타의견을 작성해주세요."
-                keyboardType="default"
-                multiline
-                blurOnSubmit={false}
-                onBlur={this._blurTextInput}
-                returnKeyType="next"
+              <FlatList
+                data={this.state.QuestionDatas}
+                keyExtractor={(item, index) => index.toString()}
+                initialNumToRender={20}
+                onEndReachedThreshold={1}
+                refreshing={this.state.refreshing}
+                onRefresh={this.onRefresh}
+                renderItem={this._renderQuestion}
               />
-            </View>
-            <Button onPress={this._submitAction} title="제출하기" />
-          </ScrollView>
-          {/* </KeyboardAwareScrollView> */}
+
+              <View
+                style={{
+                  paddingBottom: 20,
+                }}
+              >
+                <Text style={styles.opinion}>기타의견</Text>
+                <TextInput
+                  style={styles.inputArea}
+                  placeholder="기타의견을 작성해주세요."
+                  keyboardType="default"
+                  multiline
+                  blurOnSubmit={false}
+                  returnKeyType="done"
+                />
+              </View>
+              <Button onPress={this._submitAction} title="제출하기" />
+            </ScrollView>
+          </KeyboardAwareScrollView>
         </View>
       </View>
     );
@@ -260,6 +170,5 @@ const styles = StyleSheet.create({
     height: 100,
     borderColor: "gray",
     borderWidth: 1,
-    textAlignVertical: "top",
   },
 });
