@@ -24,6 +24,9 @@ export default class SurveyScreen4 extends Component {
       QuestionDatas: "",
       AnswerDatas: [],
       otherComment: "",
+      degree_id: this.props.navigation.state.params.degree_id,
+      department_id: this.props.navigation.state.params.dept_id,
+      service_id: this.props.navigation.state.params.service_id,
     };
   }
 
@@ -76,38 +79,82 @@ export default class SurveyScreen4 extends Component {
     }
   };
   _submitAction = async () => {
-    const url = new URL("http://localhost/api/v1/survey");
+    const url = new URL("http://210.181.192.195:8000/api/v1/survey");
 
     let headers = {
       "Content-Type": "application/json",
-      Accept: "application/json",
+      // "Content-Type": "application/x-www-form-urlencoded",
     };
     var mergeJSON = require("merge-json");
-    var ans = {
-      [`ans-${questionId}`]: this.state.otherComment,
-    };
-    this.state.AnswerDatas = mergeJSON.merge(this.state.AnswerDatas, ans);
+    if (this.state.otherComment !== "") {
+      var ans = {
+        [`memo`]: this.state.otherComment,
+      };
+      this.state.AnswerDatas = mergeJSON.merge(this.state.AnswerDatas, ans);
+    }
+
+    // console.log(this.state.AnswerDatas);
+
+    // for (let item in this.state.AnswerDatas) {
+    //   console.log(this.state.AnswerDatas[item]);
+    // }
+
+    // this.state.AnswerDatas.map((item, key) => {
+    //   console.log(item);
+    // });
+    // this.state.AnswerDatas.map((item, key) => {});
+
+    // for (let i = 0; i < this.state.AnswerDatas.length; i++) {
+    //   console.log(this.state.AnswerDatas[i]);
+    // }
 
     let body = {
       degree_id: this.state.degree_id,
       department_id: this.state.department_id,
       service_id: this.state.service_id,
-      "ans-*": this.state.AnswerDatas,
+      // "ans-*": this.state.AnswerDatas,
     };
+    console.log(body);
+    body = mergeJSON.merge(body, this.state.AnswerDatas);
+    console.log(body);
 
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: headers,
-        body: body,
+    fetch(url, {
+      method: "POST",
+      headers: headers,
+      body: body,
+      //mode: "no-cors",
+    })
+      .then(function (response) {
+        if (!response.ok) {
+          console.log(response);
+          throw Error(response);
+        }
+        return response;
+      })
+      .then(function (response) {
+        console.log("ok");
+      })
+      .catch(function (error) {
+        console.log(error);
       });
-      const responseJson = response.json();
-      console.log(responseJson);
-      // .then((response) => response.json())
-      // .then((json) => console.log(json));
-    } catch (error) {
-      console.log(error);
-    }
+
+    // try {
+    //   const response = await fetch(url, {
+    //     method: "POST",
+    //     headers: headers,
+    //     body: body,
+    //   });
+    //   const responseJson = response.json();
+    //   console.log(responseJson);
+    //   // .then((response) => response.json())
+    //   // .then((json) => console.log(json));
+
+    //   alert("설문조사가 완료되었습니다.");
+    //   this.props.navigation.replace("Survey_step1");
+    // } catch (error) {
+    //   console.log(error);
+    //   alert("설문 저장 도중 오류가 발생하였습니다. 관리자에게 문의해주세요.");
+    // }
   };
 
   render() {

@@ -10,6 +10,7 @@ class Get extends Component {
       url: this.props.url,
     };
   }
+
   componentDidMount() {
     this.getData();
   }
