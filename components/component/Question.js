@@ -18,15 +18,24 @@ export default class Question extends Component {
     const radioButtons = [];
     this.state.children.map((item, key) => {
       radioButtons.push(
-        <RadioButton style={styles.radio_button} value={item.id} key={key}>
+        <RadioButton
+          // onSelect={() => {
+          //   console.log(this.state.id + " " + item.id);
+          //   this.state.onSelect(this.state.id, item.id);
+          // }}
+
+          style={styles.radio_button}
+          value={item.id}
+          key={item.id}
+        >
           <View style={styles.radio_button_text_container}>
             <Text style={styles.radio_button_text}>{item.description}</Text>
           </View>
         </RadioButton>
       );
     });
-    console.log(radioButtons[0].props.value);
-    this.state.onSelect(this.state.id, radioButtons[0].props.value);
+    console.log(radioButtons);
+    // this.state.onSelect(this.state.id, radioButtons[0].props.value);
     return (
       <View>
         <View style={styles.title_container}>
@@ -35,8 +44,10 @@ export default class Question extends Component {
         <RadioGroup
           color="#9575b2"
           highlightColor="#ccc8b9"
-          selectedIndex={0}
-          onSelect={(value) => this.state.onSelect(this.state.id, value)}
+          onSelect={(value) => {
+            //console.log(radioButtons[value].props.value);
+            this.state.onSelect(this.state.id, radioButtons[value].props.value);
+          }}
           style={styles.radio_group}
         >
           {radioButtons}
