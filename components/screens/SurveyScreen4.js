@@ -49,7 +49,7 @@ export default class SurveyScreen4 extends Component {
     }
     setTimeout(() => {
       this.setState({ isLoading: false });
-    }, 1000);
+    }, 3000);
   };
 
   onRefresh = () => {
