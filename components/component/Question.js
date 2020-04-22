@@ -34,7 +34,7 @@ export default class Question extends Component {
         </RadioButton>
       );
     });
-    console.log(radioButtons);
+    // console.log(radioButtons);
     // this.state.onSelect(this.state.id, radioButtons[0].props.value);
     return (
       <View>
