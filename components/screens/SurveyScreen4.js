@@ -122,13 +122,12 @@ export default class SurveyScreen4 extends Component {
     body = mergeJSON.merge(body, this.state.AnswerDatas);
     console.log(body);
 
-    const axios = require("axios");
+    // const axios = require("axios");
 
-    axios.post("http://localhost:3000/users/", body).then((response) => {
-      console.log(response);
-    });
+    // axios.post("http://localhost:3000/users/", body).then((response) => {
+    //   console.log(response);
+    // });
 
-    /*
     fetch(url, {
       method: "POST",
       headers: headers,
@@ -148,7 +147,7 @@ export default class SurveyScreen4 extends Component {
       })
       .catch(function (error) {
         console.log(error);
-      });*/
+      });
 
     // try {
     //   const response = await fetch(url, {

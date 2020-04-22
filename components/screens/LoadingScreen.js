@@ -1,11 +1,23 @@
 import React from "react";
 import { StyleSheet, Text, View, StatusBar } from "react-native";
+import AnimatedLoader from "react-native-animated-loader";
 
+// npm install react-native-animated-loader
+// npm install lottie-react-native;
+// react-native link lottie-react-native
 export default function loading() {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      <Text style={styles.text}>Loading</Text>
+      {/*  <Text style={styles.text}>Loading</Text>*/}
+      {
+        <AnimatedLoader
+          visible={true}
+          overlayColor="rgba(255,255,255,0.75)"
+          animationStyle={styles.lottie}
+          speed={1}
+        ></AnimatedLoader>
+      }
     </View>
   );
 }
