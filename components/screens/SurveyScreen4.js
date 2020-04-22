@@ -7,13 +7,9 @@ import {
   Text,
   View,
   Button,
+  ScrollView,
 } from "react-native";
 
-//   FlatList,
-//   TextInput,
-//   ScrollView,
-// } from "react-native";
-// import { TextInput } from "react-native-gesture-handler";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import Question from "../component/Question";
@@ -157,7 +153,7 @@ export default class SurveyScreen4 extends Component {
                   keyboardType="default"
                   multiline
                   blurOnSubmit={false}
-                  returnKeyType="done"
+                  returnKeyType="next"
                 />
               </View>
               <Button onPress={this._submitAction} title="제출하기" />
