@@ -9,6 +9,7 @@ import {
   Button,
   ScrollView,
   Dimensions,
+  Constants,
 } from "react-native";
 
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -175,7 +176,7 @@ export default class SurveyScreen4 extends Component {
         <Text style={styles.title}>설문조사</Text>
         <View style={styles.survey_container}>
           <Text style={styles.text}>Step4. 설문 답변을 입력해주세요.</Text>
-          <KeyboardAwareScrollView
+          {/* <KeyboardAwareScrollView
             style={{ color: "red" }}
             ref={(ref) => {
               this.myRef = ref;
@@ -187,13 +188,13 @@ export default class SurveyScreen4 extends Component {
               width: null,
               height: null,
             }}
+          > */}
+          <ScrollView
+            contentContainerStyle={{
+              paddingHorizontal: 10,
+              paddingVertical: 10,
+            }}
           >
-            {/* <ScrollView
-              contentContainerStyle={{
-                paddingHorizontal: 10,
-                paddingVertical: 10,
-              }}
-            > */}
             <FlatList
               data={this.state.QuestionDatas}
               keyExtractor={(item, index) => index.toString()}
@@ -221,8 +222,8 @@ export default class SurveyScreen4 extends Component {
               />
             </View>
             <Button onPress={this._submitAction} title="제출하기" />
-            {/* </ScrollView> */}
-          </KeyboardAwareScrollView>
+          </ScrollView>
+          {/* </KeyboardAwareScrollView> */}
         </View>
       </View>
     );
