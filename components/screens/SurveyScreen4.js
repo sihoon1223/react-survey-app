@@ -2,16 +2,15 @@ import React, { Component } from "react";
 
 import {
   ListView,
+  FlatList,
+  TextInput,
   StyleSheet,
   Text,
   View,
   Button,
-  FlatList,
-  TextInput,
   ScrollView,
-  findNodeHandle,
 } from "react-native";
-// import { TextInput } from "react-native-gesture-handler";
+
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import Question from "../component/Question";
@@ -28,6 +27,10 @@ export default class SurveyScreen4 extends Component {
       QuestionDatas: "",
       dataSource: [],
       AnswerDatas: [],
+      otherComment: "",
+      degree_id: this.props.navigation.state.params.degree_id,
+      department_id: this.props.navigation.state.params.dept_id,
+      service_id: this.props.navigation.state.params.service_id,
     };
   }
 
@@ -83,11 +86,19 @@ export default class SurveyScreen4 extends Component {
       );
     }
   };
+  _submitAction = async () => {
+    const url = new URL("http://210.181.192.195:8000/api/v1/survey");
 
-  _handleKeyDown = (e) => {
-    if (e.nativeEvent.key == "Enter") {
-      //dismissKeyboard();
-      // Keyboard.dismiss();
+    let headers = {
+      "Content-Type": "application/json",
+      // "Content-Type": "application/x-www-form-urlencoded",
+    };
+    var mergeJSON = require("merge-json");
+    if (this.state.otherComment !== "") {
+      var ans = {
+        [`memo`]: this.state.otherComment,
+      };
+      this.state.AnswerDatas = mergeJSON.merge(this.state.AnswerDatas, ans);
     }
 
     // console.log(this.state.AnswerDatas);
@@ -160,7 +171,6 @@ export default class SurveyScreen4 extends Component {
     //   alert("설문 저장 도중 오류가 발생하였습니다. 관리자에게 문의해주세요.");
     // }
   };
-  _submitAction = () => {};
 
   render() {
     console.log(this.state.isLoading);
@@ -181,7 +191,6 @@ export default class SurveyScreen4 extends Component {
             }}
           >
             <ScrollView
-              indicatorStyle="red"
               contentContainerStyle={{
                 paddingHorizontal: 10,
                 paddingVertical: 10,
@@ -213,7 +222,7 @@ export default class SurveyScreen4 extends Component {
                   keyboardType="default"
                   multiline
                   blurOnSubmit={false}
-                  returnKeyType="done"
+                  returnKeyType="next"
                 />
               </View>
               <Button onPress={this._submitAction} title="제출하기" />
@@ -255,5 +264,6 @@ const styles = StyleSheet.create({
     height: 100,
     borderColor: "gray",
     borderWidth: 1,
+    textAlignVertical: "top",
   },
 });
