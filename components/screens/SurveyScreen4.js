@@ -13,13 +13,14 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import Question from "../component/Question";
+import LoadingScreen from "./LoadingScreen";
 
 export default class SurveyScreen4 extends Component {
   constructor(props) {
     super(props);
     // this._getSurveyQuestionList();
     this.state = {
-      isLoading: false,
+      isLoading: true,
       refreshing: false,
       QuestionDatas: "",
       AnswerDatas: [],
@@ -46,6 +47,9 @@ export default class SurveyScreen4 extends Component {
     } catch (error) {
       console.error("_getSurveyQuestionList", error);
     }
+    setTimeout(() => {
+      this.setState({ isLoading: false });
+    }, 1000);
   };
 
   onRefresh = () => {
@@ -118,10 +122,18 @@ export default class SurveyScreen4 extends Component {
     body = mergeJSON.merge(body, this.state.AnswerDatas);
     console.log(body);
 
+    const axios = require("axios");
+
+    axios.post("http://localhost:3000/users/", body).then((response) => {
+      console.log(response);
+    });
+
+    /*
     fetch(url, {
       method: "POST",
       headers: headers,
       body: body,
+      mode: "cors",
       //mode: "no-cors",
     })
       .then(function (response) {
@@ -136,7 +148,7 @@ export default class SurveyScreen4 extends Component {
       })
       .catch(function (error) {
         console.log(error);
-      });
+      });*/
 
     // try {
     //   const response = await fetch(url, {
@@ -158,7 +170,10 @@ export default class SurveyScreen4 extends Component {
   };
 
   render() {
-    return (
+    console.log(this.state.isLoading);
+    return this.state.isLoading ? (
+      <LoadingScreen />
+    ) : (
       <View style={styles.container}>
         <Text style={styles.title}>설문조사</Text>
         <View style={styles.survey_container}>
