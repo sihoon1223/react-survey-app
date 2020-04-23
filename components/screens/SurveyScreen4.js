@@ -2,12 +2,9 @@ import React, { Component } from "react";
 
 import {
   FlatList,
-  TextInput,
   StyleSheet,
   Text,
   View,
-  Button,
-  ScrollView,
   ActivityIndicator,
 } from "react-native";
 
@@ -20,8 +17,11 @@ import QuestionRadio from "../component/QuestionRadio";
 import OtherComment from "../component/OtherComment";
 // const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
-const QUESTION_LIST_URL = "http://61.73.147.176/api/v1/survey/question/1";
+const QUESTION_LIST_URL = `${
+  require("../../assets/setting/config.json").url
+}survey/question/`;
 export default class SurveyScreen4 extends Component {
+  TESTURL = "";
   constructor(props) {
     super(props);
     // this._getSurveyQuestionList();
@@ -29,13 +29,15 @@ export default class SurveyScreen4 extends Component {
       isLoading: true,
       refreshing: false,
       QuestionDatas: "",
-      // dataSource: [],
       AnswerDatas: [],
       otherComment: "",
       degree_id: this.props.navigation.state.params.degree_id,
       department_id: this.props.navigation.state.params.dept_id,
       service_id: this.props.navigation.state.params.service_id,
     };
+
+    this.TESTURL = QUESTION_LIST_URL + this.state.degree_id;
+    console.log(this.TESTURL);
   }
 
   _dataFromChild = (datas) => {
@@ -43,26 +45,8 @@ export default class SurveyScreen4 extends Component {
     this.setState({ QuestionDatas: datas, isLoading: false });
   };
 
-  // componentDidMount() {
-  //   this._getSurveyQuestionList();
-  // }
-
   _ChangeOtherComment = (text) => {
     this.state.otherComment = text;
-  };
-  _getSurveyQuestionList = async () => {
-    let url = "http://61.73.147.176/api/v1/survey/question/1";
-    try {
-      const response = await fetch(url);
-      const responseJson = await response.json();
-
-      this.setState({
-        QuestionDatas: responseJson,
-      });
-    } catch (error) {
-      console.error("_getSurveyQuestionList", error);
-    }
-    //   console.log(QuestionDatas);
   };
 
   onRefresh = () => {
@@ -189,9 +173,11 @@ export default class SurveyScreen4 extends Component {
     //   alert("설문 저장 도중 오류가 발생하였습니다. 관리자에게 문의해주세요.");
     // }
   };
+
   _focusTextInput = () => {
     console.log("_focusTextInput");
   };
+
   _blurTextInput = () => {
     console.log("_blurTextInput");
     this.scrollRef.scrollToEnd();
@@ -201,7 +187,7 @@ export default class SurveyScreen4 extends Component {
     return this.state.isLoading ? (
       <View style={{ flex: 1, justifyContent: "center" }}>
         <ActivityIndicator size="small" color="gray" />
-        <Get url={QUESTION_LIST_URL} dataFromChild={this._dataFromChild} />
+        <Get url={this.TESTURL} dataFromChild={this._dataFromChild} />
       </View>
     ) : (
       <View style={styles.container}>

@@ -10,7 +10,9 @@ import {
 import Accordian from "../component/Accordian";
 import Get from "../module/Get";
 
-const SERVICE_LIST_URL = "http://61.73.147.176/api/v1/service";
+const SERVICE_LIST_URL = `${
+  require("../../assets/setting/config.json").url
+}service`;
 
 class SurveyScreen3 extends React.Component {
   constructor(props) {

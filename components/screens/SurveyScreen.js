@@ -14,7 +14,9 @@ import SurveyItem from "../component/SurveyItem";
 import LoadingScreen from "./LoadingScreen";
 import Get from "../module/Get";
 
-const SURVEY_LIST_URL = "http://61.73.147.176/api/v1/survey/degree";
+const SURVEY_LIST_URL = `${
+  require("../../assets/setting/config.json").url
+}survey/degree`;
 
 class SurveyScreen extends React.Component {
   constructor(props) {
