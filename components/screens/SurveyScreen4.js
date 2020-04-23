@@ -1,4 +1,4 @@
-import React, { Component, createRef } from "react";
+import React, { Component } from "react";
 
 import {
   FlatList,
@@ -20,7 +20,6 @@ export default class SurveyScreen4 extends Component {
   constructor(props) {
     super(props);
     // this._getSurveyQuestionList();
-    this.scrollRef = new createRef();
     this.state = {
       isLoading: true,
       refreshing: false,
@@ -55,8 +54,9 @@ export default class SurveyScreen4 extends Component {
     }
     setTimeout(() => {
       this.setState({ isLoading: false });
-    }, 100);
-    //   console.log(QuestionDatas);
+    }, 1000);
+    //console.log(this.state.QuestionDatas.length);
+    console.log(this.state.QuestionDatas);
   };
 
   onRefresh = () => {
@@ -75,38 +75,26 @@ export default class SurveyScreen4 extends Component {
     const { id, degree_id, type, required, question, children } = item;
 
     if (type === "radio") {
-      if (item.id === this.state.QuestionDatas.length) {
-        return (
-          <View>
-            <QuestionRadio
-              id={id}
-              degree_id={degree_id}
-              type={type}
-              required={required}
-              question={question}
-              children={children}
-              onSelect={this._setValue}
-            ></QuestionRadio>
-            <OtherComment
+      return (
+        <View>
+          <QuestionRadio
+            id={id}
+            degree_id={degree_id}
+            type={type}
+            required={required}
+            question={question}
+            children={children}
+            endNumber={this.state.QuestionDatas.length}
+            onSelect={this._setValue}
+            _ChangeOtherComment={this._ChangeOtherComment}
+            _submitAction={this._submitAction}
+          ></QuestionRadio>
+          {/* <OtherComment
               _ChangeOtherComment={this._ChangeOtherComment}
               _submitAction={this._submitAction}
-            ></OtherComment>
-          </View>
-        );
-      } else {
-        return (
-          <View>
-            <QuestionRadio
-              id={id}
-              degree_id={degree_id}
-              type={type}
-              question={question}
-              children={children}
-              onSelect={this._setValue}
-            ></QuestionRadio>
-          </View>
-        );
-      }
+            ></OtherComment> */}
+        </View>
+      );
     }
   };
   _submitAction = async () => {
@@ -195,13 +183,7 @@ export default class SurveyScreen4 extends Component {
     //   alert("설문 저장 도중 오류가 발생하였습니다. 관리자에게 문의해주세요.");
     // }
   };
-  _focusTextInput = () => {
-    console.log("Dd");
-  };
-  _blurTextInput = () => {
-    console.log("kk");
-    this.scrollRef.scrollToEnd();
-  };
+
   render() {
     console.log(this.state.isLoading);
     return this.state.isLoading ? (

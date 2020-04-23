@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { RadioGroup, RadioButton } from "react-native-flexi-radio-button";
 import { StyleSheet, Text, View } from "react-native";
+import OtherComment from "./OtherComment";
 
 export default class QuestionRadio extends Component {
   constructor(props) {
@@ -11,6 +12,9 @@ export default class QuestionRadio extends Component {
       question: props.question,
       children: props.children,
       onSelect: props.onSelect,
+      endNumber: props.endNumber,
+      _ChangeOtherComment: props._ChangeOtherComment,
+      _submitAction: props._submitAction,
     };
   }
 
@@ -18,43 +22,65 @@ export default class QuestionRadio extends Component {
     const radioButtons = [];
     this.state.children.map((item, key) => {
       radioButtons.push(
-        <RadioButton
-          // onSelect={() => {
-          //   console.log(this.state.id + " " + item.id);
-          //   this.state.onSelect(this.state.id, item.id);
-          // }}
-
-          style={styles.radio_button}
-          value={item.id}
-          key={item.id}
-        >
+        <RadioButton style={styles.radio_button} value={item.id} key={item.id}>
           <View style={styles.radio_button_text_container}>
             <Text style={styles.radio_button_text}>{item.description}</Text>
           </View>
         </RadioButton>
       );
     });
-    // console.log(radioButtons);
-    // this.state.onSelect(this.state.id, radioButtons[0].props.value);
-    return (
-      <View>
-        <View style={styles.title_container}>
-          <Text style={styles.title_text}>{this.state.question}</Text>
-          <Text style={styles.title_text}>*</Text>
+
+    if (this.state.endNumber === this.state.id) {
+      return (
+        <View>
+          <View style={styles.title_container}>
+            <Text style={styles.title_text}>{this.state.question}</Text>
+            <Text style={styles.title_text}>*</Text>
+          </View>
+          <RadioGroup
+            color="#9575b2"
+            highlightColor="#ccc8b9"
+            onSelect={(value) => {
+              //console.log(radioButtons[value].props.value);
+              this.state.onSelect(
+                this.state.id,
+                radioButtons[value].props.value
+              );
+            }}
+            style={styles.radio_group}
+          >
+            {radioButtons}
+          </RadioGroup>
+          <OtherComment
+            _ChangeOtherComment={this.state._ChangeOtherComment}
+            _submitAction={this.state._submitAction}
+          />
         </View>
-        <RadioGroup
-          color="#9575b2"
-          highlightColor="#ccc8b9"
-          onSelect={(value) => {
-            //console.log(radioButtons[value].props.value);
-            this.state.onSelect(this.state.id, radioButtons[value].props.value);
-          }}
-          style={styles.radio_group}
-        >
-          {radioButtons}
-        </RadioGroup>
-      </View>
-    );
+      );
+    } else {
+      return (
+        <View>
+          <View style={styles.title_container}>
+            <Text style={styles.title_text}>{this.state.question}</Text>
+            <Text style={styles.title_text}>*</Text>
+          </View>
+          <RadioGroup
+            color="#9575b2"
+            highlightColor="#ccc8b9"
+            onSelect={(value) => {
+              //console.log(radioButtons[value].props.value);
+              this.state.onSelect(
+                this.state.id,
+                radioButtons[value].props.value
+              );
+            }}
+            style={styles.radio_group}
+          >
+            {radioButtons}
+          </RadioGroup>
+        </View>
+      );
+    }
   }
 }
 
