@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { RadioGroup, RadioButton } from "react-native-flexi-radio-button";
 import { StyleSheet, Text, View } from "react-native";
 
-export default class Question extends Component {
+export default class QuestionRadio extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -40,6 +40,7 @@ export default class Question extends Component {
       <View>
         <View style={styles.title_container}>
           <Text style={styles.title_text}>{this.state.question}</Text>
+          <Text style={styles.title_text}>*</Text>
         </View>
         <RadioGroup
           color="#9575b2"

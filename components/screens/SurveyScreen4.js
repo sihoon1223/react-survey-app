@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 
 import {
-  ListView,
   FlatList,
   TextInput,
   StyleSheet,
@@ -13,10 +12,10 @@ import {
 
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-import Question from "../component/Question";
+import QuestionRadio from "../component/QuestionRadio";
 import LoadingScreen from "./LoadingScreen";
-
-const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+import OtherComment from "../component/OtherComment";
+// const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 export default class SurveyScreen4 extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +24,7 @@ export default class SurveyScreen4 extends Component {
       isLoading: true,
       refreshing: false,
       QuestionDatas: "",
-      dataSource: [],
+      // dataSource: [],
       AnswerDatas: [],
       otherComment: "",
       degree_id: this.props.navigation.state.params.degree_id,
@@ -38,6 +37,9 @@ export default class SurveyScreen4 extends Component {
     this._getSurveyQuestionList();
   }
 
+  _ChangeOtherComment = (text) => {
+    this.state.otherComment = text;
+  };
   _getSurveyQuestionList = async () => {
     let url = "http://61.73.147.176/api/v1/survey/question/1";
     try {
@@ -52,8 +54,9 @@ export default class SurveyScreen4 extends Component {
     }
     setTimeout(() => {
       this.setState({ isLoading: false });
-    }, 3000);
-    console.log(QuestionDatas);
+    }, 1000);
+    //console.log(this.state.QuestionDatas.length);
+    console.log(this.state.QuestionDatas);
   };
 
   onRefresh = () => {
@@ -69,25 +72,45 @@ export default class SurveyScreen4 extends Component {
   };
 
   _renderQuestion = ({ item }) => {
-    const { id, degree_id, type, question, children } = item;
+    const { id, degree_id, type, required, question, children } = item;
 
     if (type === "radio") {
-      return (
-        <View>
-          <Question
-            id={id}
-            degree_id={degree_id}
-            type={type}
-            question={question}
-            children={children}
-            onSelect={this._setValue}
-          ></Question>
-        </View>
-      );
+      if (item.id === this.state.QuestionDatas.length) {
+        return (
+          <View>
+            <QuestionRadio
+              id={id}
+              degree_id={degree_id}
+              type={type}
+              required={required}
+              question={question}
+              children={children}
+              onSelect={this._setValue}
+            ></QuestionRadio>
+            <OtherComment
+              _ChangeOtherComment={this._ChangeOtherComment}
+              _submitAction={this._submitAction}
+            ></OtherComment>
+          </View>
+        );
+      } else {
+        return (
+          <View>
+            <QuestionRadio
+              id={id}
+              degree_id={degree_id}
+              type={type}
+              question={question}
+              children={children}
+              onSelect={this._setValue}
+            ></QuestionRadio>
+          </View>
+        );
+      }
     }
   };
   _submitAction = async () => {
-    const url = new URL("http://210.181.192.195:8000/api/v1/survey");
+    const url = new URL("http://61.73.147.176/api/v1/survey");
 
     let headers = {
       "Content-Type": "application/json",
@@ -135,8 +158,9 @@ export default class SurveyScreen4 extends Component {
     fetch(url, {
       method: "POST",
       headers: headers,
-      body: body,
-      mode: "cors",
+      body: JSON.stringify(body),
+
+      // mode: "cors",
       //mode: "no-cors",
     })
       .then(function (response) {
@@ -190,26 +214,26 @@ export default class SurveyScreen4 extends Component {
               height: null,
             }}
           >
-            <ScrollView
+            {/* <ScrollView
               contentContainerStyle={{
                 paddingHorizontal: 10,
                 paddingVertical: 10,
               }}
-            >
-              <ListView
+            > */}
+            {/* <ListView
                 dataSource={this.state.dataSource}
                 renderRow={(item) => this._renderQuestion(item)}
-              ></ListView>
-              {/* <FlatList
-                data={this.state.QuestionDatas}
-                keyExtractor={(item, index) => index.toString()}
-                initialNumToRender={20}
-                onEndReachedThreshold={1}
-                refreshing={this.state.refreshing}
-                onRefresh={this.onRefresh}
-                renderItem={this._renderQuestion}
-              /> */}
-
+              ></ListView> */}
+            <FlatList
+              data={this.state.QuestionDatas}
+              keyExtractor={(item, index) => index.toString()}
+              initialNumToRender={20}
+              onEndReachedThreshold={1}
+              refreshing={this.state.refreshing}
+              onRefresh={this.onRefresh}
+              renderItem={this._renderQuestion}
+            />
+            {/* 
               <View
                 style={{
                   paddingBottom: 20,
@@ -223,10 +247,13 @@ export default class SurveyScreen4 extends Component {
                   multiline
                   blurOnSubmit={false}
                   returnKeyType="next"
+                  onChangeText={(text) => {
+                    this.state.otherComment = text;
+                  }}
                 />
               </View>
-              <Button onPress={this._submitAction} title="제출하기" />
-            </ScrollView>
+              <Button onPress={this._submitAction} title="제출하기" /> */}
+            {/* </ScrollView> */}
           </KeyboardAwareScrollView>
         </View>
       </View>
