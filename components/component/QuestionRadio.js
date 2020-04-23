@@ -10,6 +10,7 @@ export default class QuestionRadio extends Component {
       id: props.id,
       type: props.type,
       question: props.question,
+      required: props.required,
       children: props.children,
       onSelect: props.onSelect,
       endNumber: props.endNumber,
@@ -35,7 +36,11 @@ export default class QuestionRadio extends Component {
         <View>
           <View style={styles.title_container}>
             <Text style={styles.title_text}>{this.state.question}</Text>
-            <Text style={styles.title_text}>*</Text>
+            {this.state.required === 1 ? (
+              <Text style={styles.title_required}>*</Text>
+            ) : (
+              <Text style={styles.title_text}>*</Text>
+            )}
           </View>
           <RadioGroup
             color="#9575b2"
@@ -62,7 +67,7 @@ export default class QuestionRadio extends Component {
         <View>
           <View style={styles.title_container}>
             <Text style={styles.title_text}>{this.state.question}</Text>
-            <Text style={styles.title_text}>*</Text>
+            <Text style={styles.title_required}>*</Text>
           </View>
           <RadioGroup
             color="#9575b2"
@@ -91,11 +96,18 @@ const styles = StyleSheet.create({
     borderTopWidth: 1.5,
     borderBottomColor: "gray",
     borderTopColor: "gray",
+    flexDirection: "row",
   },
   title_text: {
     margin: 5,
     fontWeight: "bold",
     fontSize: 15,
+  },
+  title_required: {
+    margin: 5,
+    fontWeight: "bold",
+    fontSize: 15,
+    color: "red",
   },
   radio_group: {
     marginTop: 5,
