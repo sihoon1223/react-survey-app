@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { RadioGroup, RadioButton } from "react-native-flexi-radio-button";
 import { StyleSheet, Text, View } from "react-native";
+import OtherComment from "./OtherComment";
 
 export default class QuestionRadio extends Component {
   constructor(props) {

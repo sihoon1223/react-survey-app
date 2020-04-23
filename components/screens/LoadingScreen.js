@@ -32,8 +32,12 @@ export default function loading() {
       } */}
       <Image
         style={{ height: "100%", width: "100%" }}
-        source={require("../../assets/splash.png")}
+        source={require("../../assets/ktnet_kor_1242.png")}
       />
+      <Text style={{ color: "gray", fontSize: 10 }}>
+        {" "}
+        Copyright 2020 KTNET. All rights reserved.
+      </Text>
     </View>
   );
 }
@@ -41,10 +45,11 @@ export default function loading() {
 const styles = StyleSheet.create({
   container: {
     flex: 1, //전체 공간 다 차지하고 싶으면 1!
-    justifyContent: "flex-end",
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 30,
     paddingVertical: 100,
-    backgroundColor: "#FDF6AA",
+    backgroundColor: "#fcfcfc",
   },
   text: {
     color: "#2c2c2c",

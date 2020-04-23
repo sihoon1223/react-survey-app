@@ -8,14 +8,19 @@ import {
   View,
   Button,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
+
+import Get from "../module/Get";
 
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import QuestionRadio from "../component/QuestionRadio";
-import LoadingScreen from "./LoadingScreen";
+
 import OtherComment from "../component/OtherComment";
 // const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+
+const QUESTION_LIST_URL = "http://61.73.147.176/api/v1/survey/question/1";
 export default class SurveyScreen4 extends Component {
   constructor(props) {
     super(props);
@@ -34,9 +39,14 @@ export default class SurveyScreen4 extends Component {
     };
   }
 
-  componentDidMount() {
-    this._getSurveyQuestionList();
-  }
+  _dataFromChild = (datas) => {
+    //콜백메서드 등록
+    this.setState({ QuestionDatas: datas, isLoading: false });
+  };
+
+  // componentDidMount() {
+  //   this._getSurveyQuestionList();
+  // }
 
   _ChangeOtherComment = (text) => {
     this.state.otherComment = text;
@@ -53,9 +63,6 @@ export default class SurveyScreen4 extends Component {
     } catch (error) {
       console.error("_getSurveyQuestionList", error);
     }
-    setTimeout(() => {
-      this.setState({ isLoading: false });
-    }, 100);
     //   console.log(QuestionDatas);
   };
 
@@ -86,11 +93,11 @@ export default class SurveyScreen4 extends Component {
               question={question}
               children={children}
               onSelect={this._setValue}
-            ></QuestionRadio>
-            <OtherComment
+            />
+            {/* <OtherComment
               _ChangeOtherComment={this._ChangeOtherComment}
               _submitAction={this._submitAction}
-            ></OtherComment>
+            /> */}
           </View>
         );
       } else {
@@ -196,16 +203,19 @@ export default class SurveyScreen4 extends Component {
     // }
   };
   _focusTextInput = () => {
-    console.log("Dd");
+    console.log("_focusTextInput");
   };
   _blurTextInput = () => {
-    console.log("kk");
+    console.log("_blurTextInput");
     this.scrollRef.scrollToEnd();
   };
   render() {
     console.log(this.state.isLoading);
     return this.state.isLoading ? (
-      <LoadingScreen />
+      <View style={{ flex: 1, justifyContent: "center" }}>
+        <ActivityIndicator size="small" color="gray" />
+        <Get url={QUESTION_LIST_URL} dataFromChild={this._dataFromChild} />
+      </View>
     ) : (
       <View style={styles.container}>
         <Text style={styles.title}>설문조사</Text>
@@ -237,7 +247,30 @@ export default class SurveyScreen4 extends Component {
               onEndReachedThreshold={1}
               refreshing={this.state.refreshing}
               onRefresh={this.onRefresh}
+              style={{
+                overflowX: "hidden",
+              }}
               renderItem={this._renderQuestion}
+              // ListFooterComponent={
+              //   <View
+              //     style={{
+              //       paddingBottom: 20,
+              //     }}
+              //   >
+              //     <Text style={styles.opinion}>기타의견</Text>
+              //     <TextInput
+              //       style={styles.inputArea}
+              //       placeholder="기타의견을 작성해주세요."
+              //       keyboardType="default"
+              //       multiline
+              //       blurOnSubmit={false}
+              //       returnKeyType="next"
+              //       onChangeText={(text) => {
+              //         this.state.otherComment = text;
+              //       }}
+              //     />
+              //   </View>
+              // }
             />
             {/* 
               <View
