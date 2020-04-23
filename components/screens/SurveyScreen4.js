@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 
 import {
   FlatList,
@@ -20,6 +20,7 @@ export default class SurveyScreen4 extends Component {
   constructor(props) {
     super(props);
     // this._getSurveyQuestionList();
+    this.scrollRef = new createRef();
     this.state = {
       isLoading: true,
       refreshing: false,
@@ -54,9 +55,8 @@ export default class SurveyScreen4 extends Component {
     }
     setTimeout(() => {
       this.setState({ isLoading: false });
-    }, 1000);
-    //console.log(this.state.QuestionDatas.length);
-    console.log(this.state.QuestionDatas);
+    }, 100);
+    //   console.log(QuestionDatas);
   };
 
   onRefresh = () => {
@@ -195,7 +195,13 @@ export default class SurveyScreen4 extends Component {
     //   alert("설문 저장 도중 오류가 발생하였습니다. 관리자에게 문의해주세요.");
     // }
   };
-
+  _focusTextInput = () => {
+    console.log("Dd");
+  };
+  _blurTextInput = () => {
+    console.log("kk");
+    this.scrollRef.scrollToEnd();
+  };
   render() {
     console.log(this.state.isLoading);
     return this.state.isLoading ? (

@@ -1,5 +1,12 @@
 import React from "react";
-import { StyleSheet, Text, View, StatusBar, Platform } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  StatusBar,
+  Platform,
+  Image,
+} from "react-native";
 import AnimatedLoader from "react-native-animated-loader";
 
 // npm install react-native-animated-loader
@@ -13,8 +20,7 @@ export default function loading() {
     </View>
   ) : (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      {/*  */}
+      {/* <StatusBar barStyle="dark-content" />
       {
         <AnimatedLoader
           visible={true}
@@ -23,7 +29,11 @@ export default function loading() {
           speed={1}
           source={require("../../loadicon/19869-heart-notifications.json")}
         ></AnimatedLoader>
-      }
+      } */}
+      <Image
+        style={{ height: "100%", width: "100%" }}
+        source={require("../../assets/splash.png")}
+      />
     </View>
   );
 }
