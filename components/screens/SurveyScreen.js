@@ -6,6 +6,7 @@ import {
   Text,
   FlatList,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import Constants from "expo-constants";
 
@@ -91,23 +92,19 @@ class SurveyScreen extends React.Component {
     );
   };
 
-  _loadingView = () => {
-    setTimeout(() => {
-      return <LoadingScreen />;
-    }, 3000);
-  };
-
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>설문조사</Text>
         <View style={styles.survey_container}>
           <Text style={styles.text}>STEP 1. 설문조사를 선택해주세요.</Text>
-
           {this.state.isLoading || this.state.refreshing ? (
-            <Get url={SURVEY_LIST_URL} dataFromChild={this._dataFromChild}>
-              {(this.state.refreshing = false)}
-            </Get>
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <ActivityIndicator size="small" color="gray" />
+              <Get url={SURVEY_LIST_URL} dataFromChild={this._dataFromChild}>
+                {(this.state.refreshing = false)}
+              </Get>
+            </View>
           ) : (
             <FlatList
               data={this.state.surveyDatas}

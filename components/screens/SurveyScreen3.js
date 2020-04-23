@@ -1,5 +1,11 @@
 import React from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 
 import Accordian from "../component/Accordian";
 import Get from "../module/Get";
@@ -79,7 +85,10 @@ class SurveyScreen3 extends React.Component {
         <View style={styles.survey_container}>
           <Text style={styles.text}>STEP 3. 담당 업무를 선택해주세요.</Text>
           {this.state.isLoading ? (
-            <Get url={SERVICE_LIST_URL} dataFromChild={this._dataFromChild} />
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <ActivityIndicator size="small" color="gray" />
+              <Get url={SERVICE_LIST_URL} dataFromChild={this._dataFromChild} />
+            </View>
           ) : (
             <ScrollView
               contentContainerStyle={{

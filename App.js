@@ -13,7 +13,7 @@ export default class App extends React.Component {
     //loading splash view
     setTimeout(() => {
       this.setState({ isLoading: false });
-    }, 3000);
+    }, 100);
   }
   render() {
     return <>{this.state.isLoading ? <LoadingScreen /> : <MainStack />}</>;

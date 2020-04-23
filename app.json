@@ -7,9 +7,15 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/ktnet_kor_1242.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "ldpi": "./assets/ktnet_kor_1242.png",
+      "mdpi": "./assets/ktnet_kor_1242.png",
+      "hdpi": "./assets/ktnet_kor_1242.png",
+      "xhdpi": "./assets/ktnet_kor_1242.png",
+      "xxhdpi": "./assets/ktnet_kor_1242.png",
+      "xxxhdpi": "./assets/ktnet_kor_1242.png",
+      "backgroundColor": "#fcfcfc"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
