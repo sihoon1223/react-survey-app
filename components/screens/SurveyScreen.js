@@ -10,6 +10,7 @@ import {
 import Constants from "expo-constants";
 
 import SurveyItem from "../component/SurveyItem";
+import LoadingScreen from "./LoadingScreen";
 import Get from "../module/Get";
 
 const SURVEY_LIST_URL = "http://61.73.147.176/api/v1/survey/degree";
@@ -90,12 +91,19 @@ class SurveyScreen extends React.Component {
     );
   };
 
+  _loadingView = () => {
+    setTimeout(() => {
+      return <LoadingScreen />;
+    }, 3000);
+  };
+
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>설문조사</Text>
         <View style={styles.survey_container}>
           <Text style={styles.text}>STEP 1. 설문조사를 선택해주세요.</Text>
+
           {this.state.isLoading || this.state.refreshing ? (
             <Get url={SURVEY_LIST_URL} dataFromChild={this._dataFromChild}>
               {(this.state.refreshing = false)}
@@ -116,6 +124,33 @@ class SurveyScreen extends React.Component {
       </View>
     );
   }
+  //   {this.state.splash?(
+  //     <LoadingScreen/>
+  //   ):(<View style={styles.container}>
+  //     <Text style={styles.title}>설문조사</Text>
+  //     <View style={styles.survey_container}>
+  //       <Text style={styles.text}>STEP 1. 설문조사를 선택해주세요.</Text>
+  //       {this.state.isLoading || this.state.refreshing ? (
+  //         <Get url={SURVEY_LIST_URL} dataFromChild={this._dataFromChild}>
+  //           {(this.state.refreshing = false)}
+  //         </Get>
+  //         ) : (
+  //         <FlatList
+  //           data={this.state.surveyDatas}
+  //           keyExtractor={(item, index) => index.toString()}
+  //           initialNumToRender={20}
+  //           //스크롤이 onEndReachedThreshold에 설정한 값에 도달하면 onEndReached 함수가 실행 (인피니티 스크롤
+  //           onEndReachedThreshold={1}
+  //           refreshing={this.state.refreshing}
+  //           onRefresh={this.onRefresh}
+  //           renderItem={this._renderItem}
+  //         />
+  //       )}
+  //     </View>
+  //   </View>
+
+  //   )}
+  // );
 }
 
 const styles = StyleSheet.create({

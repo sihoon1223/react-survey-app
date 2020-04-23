@@ -1,7 +1,6 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 
 import {
-  ListView,
   FlatList,
   TextInput,
   StyleSheet,
@@ -16,11 +15,12 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import Question from "../component/Question";
 import LoadingScreen from "./LoadingScreen";
 
-const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+// const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 export default class SurveyScreen4 extends Component {
   constructor(props) {
     super(props);
     // this._getSurveyQuestionList();
+    this.scrollRef = new createRef();
     this.state = {
       isLoading: true,
       refreshing: false,
@@ -52,8 +52,8 @@ export default class SurveyScreen4 extends Component {
     }
     setTimeout(() => {
       this.setState({ isLoading: false });
-    }, 3000);
-    console.log(QuestionDatas);
+    }, 100);
+    //   console.log(QuestionDatas);
   };
 
   onRefresh = () => {
@@ -87,7 +87,7 @@ export default class SurveyScreen4 extends Component {
     }
   };
   _submitAction = async () => {
-    const url = new URL("http://210.181.192.195:8000/api/v1/survey");
+    const url = new URL("http://210.181.192.195:9000/api/v1/survey");
 
     let headers = {
       "Content-Type": "application/json",
@@ -171,6 +171,13 @@ export default class SurveyScreen4 extends Component {
     //   alert("설문 저장 도중 오류가 발생하였습니다. 관리자에게 문의해주세요.");
     // }
   };
+  _focusTextInput = () => {
+    console.log("Dd");
+  };
+  _blurTextInput = () => {
+    console.log("kk");
+    this.scrollRef.scrollToEnd();
+  };
 
   render() {
     console.log(this.state.isLoading);
@@ -181,26 +188,36 @@ export default class SurveyScreen4 extends Component {
         <Text style={styles.title}>설문조사</Text>
         <View style={styles.survey_container}>
           <Text style={styles.text}>Step4. 설문 답변을 입력해주세요.</Text>
-          <KeyboardAwareScrollView
-            contentContainerStyle={{
-              flex: 1,
-              justifyContent: "space-around",
-              alignItems: "center",
-              width: null,
-              height: null,
+
+          <ScrollView
+            ref={(ref) => {
+              this.scrollRef = ref;
             }}
+            contentContainerStyle={{
+              paddingHorizontal: 10,
+              paddingVertical: 10,
+            }}
+            style={{ backgroundColor: "blue" }}
+            indicatorStyle={"black"}
           >
-            <ScrollView
-              contentContainerStyle={{
-                paddingHorizontal: 10,
-                paddingVertical: 10,
-              }}
+            <KeyboardAwareScrollView
+              contentContainerStyle={
+                {
+                  // flex: 1,
+                  // justifyContent: "space-around",
+                  // alignItems: "center",
+                  // width: null,
+                  // height: null,
+                }
+              }
+              indicatorStyle={"white"}
+              style={{ backgroundColor: "red" }}
             >
-              <ListView
+              {/* <ListView
                 dataSource={this.state.dataSource}
                 renderRow={(item) => this._renderQuestion(item)}
-              ></ListView>
-              {/* <FlatList
+              ></ListView> */}
+              <FlatList
                 data={this.state.QuestionDatas}
                 keyExtractor={(item, index) => index.toString()}
                 initialNumToRender={20}
@@ -208,7 +225,7 @@ export default class SurveyScreen4 extends Component {
                 refreshing={this.state.refreshing}
                 onRefresh={this.onRefresh}
                 renderItem={this._renderQuestion}
-              /> */}
+              />
 
               <View
                 style={{
@@ -223,11 +240,13 @@ export default class SurveyScreen4 extends Component {
                   multiline
                   blurOnSubmit={false}
                   returnKeyType="next"
+                  onFocus={this._focusTextInput}
+                  onBlur={this._blurTextInput}
                 />
               </View>
               <Button onPress={this._submitAction} title="제출하기" />
-            </ScrollView>
-          </KeyboardAwareScrollView>
+            </KeyboardAwareScrollView>
+          </ScrollView>
         </View>
       </View>
     );
