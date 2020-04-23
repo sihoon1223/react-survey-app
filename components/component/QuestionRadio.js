@@ -13,9 +13,6 @@ export default class QuestionRadio extends Component {
       required: props.required,
       children: props.children,
       onSelect: props.onSelect,
-      endNumber: props.endNumber,
-      _ChangeOtherComment: props._ChangeOtherComment,
-      _submitAction: props._submitAction,
     };
   }
 
@@ -30,62 +27,29 @@ export default class QuestionRadio extends Component {
         </RadioButton>
       );
     });
-
-    if (this.state.endNumber === this.state.id) {
-      return (
-        <View>
-          <View style={styles.title_container}>
-            <Text style={styles.title_text}>{this.state.question}</Text>
-            {this.state.required === 1 ? (
-              <Text style={styles.title_required}>*</Text>
-            ) : (
-              <Text style={styles.title_text}>*</Text>
-            )}
-          </View>
-          <RadioGroup
-            color="#9575b2"
-            highlightColor="#ccc8b9"
-            onSelect={(value) => {
-              //console.log(radioButtons[value].props.value);
-              this.state.onSelect(
-                this.state.id,
-                radioButtons[value].props.value
-              );
-            }}
-            style={styles.radio_group}
-          >
-            {radioButtons}
-          </RadioGroup>
-          <OtherComment
-            _ChangeOtherComment={this.state._ChangeOtherComment}
-            _submitAction={this.state._submitAction}
-          />
-        </View>
-      );
-    } else {
-      return (
-        <View>
-          <View style={styles.title_container}>
-            <Text style={styles.title_text}>{this.state.question}</Text>
+    return (
+      <View>
+        <View style={styles.title_container}>
+          <Text style={styles.title_text}>{this.state.question}</Text>
+          {this.state.required === 1 ? (
             <Text style={styles.title_required}>*</Text>
-          </View>
-          <RadioGroup
-            color="#9575b2"
-            highlightColor="#ccc8b9"
-            onSelect={(value) => {
-              //console.log(radioButtons[value].props.value);
-              this.state.onSelect(
-                this.state.id,
-                radioButtons[value].props.value
-              );
-            }}
-            style={styles.radio_group}
-          >
-            {radioButtons}
-          </RadioGroup>
+          ) : (
+            <Text style={styles.title_text}>*</Text>
+          )}
         </View>
-      );
-    }
+        <RadioGroup
+          color="#9575b2"
+          highlightColor="#ccc8b9"
+          onSelect={(value) => {
+            //console.log(radioButtons[value].props.value);
+            this.state.onSelect(this.state.id, radioButtons[value].props.value);
+          }}
+          style={styles.radio_group}
+        >
+          {radioButtons}
+        </RadioGroup>
+      </View>
+    );
   }
 }
 

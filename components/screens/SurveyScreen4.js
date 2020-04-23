@@ -90,10 +90,10 @@ export default class SurveyScreen4 extends Component {
             required={required}
             question={question}
             children={children}
-            endNumber={this.state.QuestionDatas.length}
+            // endNumber={this.state.QuestionDatas.length}
             onSelect={this._setValue}
-            _ChangeOtherComment={this._ChangeOtherComment}
-            _submitAction={this._submitAction}
+            // _ChangeOtherComment={this._ChangeOtherComment}
+            // _submitAction={this._submitAction}
           ></QuestionRadio>
           {/* <OtherComment
               _ChangeOtherComment={this._ChangeOtherComment}
@@ -212,21 +212,11 @@ export default class SurveyScreen4 extends Component {
             contentContainerStyle={{
               flex: 1,
               justifyContent: "space-around",
-              alignItems: "center",
+              // alignItems: "center",
               width: null,
               height: null,
             }}
           >
-            {/* <ScrollView
-              contentContainerStyle={{
-                paddingHorizontal: 10,
-                paddingVertical: 10,
-              }}
-            > */}
-            {/* <ListView
-                dataSource={this.state.dataSource}
-                renderRow={(item) => this._renderQuestion(item)}
-              ></ListView> */}
             <FlatList
               data={this.state.QuestionDatas}
               keyExtractor={(item, index) => index.toString()}
@@ -238,48 +228,13 @@ export default class SurveyScreen4 extends Component {
                 overflowX: "hidden",
               }}
               renderItem={this._renderQuestion}
-              // ListFooterComponent={
-              //   <View
-              //     style={{
-              //       paddingBottom: 20,
-              //     }}
-              //   >
-              //     <Text style={styles.opinion}>기타의견</Text>
-              //     <TextInput
-              //       style={styles.inputArea}
-              //       placeholder="기타의견을 작성해주세요."
-              //       keyboardType="default"
-              //       multiline
-              //       blurOnSubmit={false}
-              //       returnKeyType="next"
-              //       onChangeText={(text) => {
-              //         this.state.otherComment = text;
-              //       }}
-              //     />
-              //   </View>
-              // }
-            />
-            {/* 
-              <View
-                style={{
-                  paddingBottom: 20,
-                }}
-              >
-                <Text style={styles.opinion}>기타의견</Text>
-                <TextInput
-                  style={styles.inputArea}
-                  placeholder="기타의견을 작성해주세요."
-                  keyboardType="default"
-                  multiline
-                  blurOnSubmit={false}
-                  returnKeyType="next"
-                  onChangeText={(text) => {
-                    this.state.otherComment = text;
-                  }}
+              ListFooterComponent={
+                <OtherComment
+                  _submitAction={this._submitAction}
+                  _ChangeOtherComment={this._ChangeOtherComment}
                 />
-              </View>
-              <Button onPress={this._submitAction} title="제출하기" /> */}
-            {/* </ScrollView> */}
+              }
+            />
           </KeyboardAwareScrollView>
         </View>
       </View>
