@@ -18,9 +18,10 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import QuestionRadio from "../component/QuestionRadio";
 
 import OtherComment from "../component/OtherComment";
+import QuestionSubjective from "../component/QuestionSubjective";
 // const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
-const QUESTION_LIST_URL = "http://61.73.147.176/api/v1/survey/question/1";
+const QUESTION_LIST_URL = "http://61.73.147.176/api/v1/survey/question/24";
 export default class SurveyScreen4 extends Component {
   constructor(props) {
     super(props);
@@ -29,7 +30,6 @@ export default class SurveyScreen4 extends Component {
       isLoading: true,
       refreshing: false,
       QuestionDatas: "",
-      // dataSource: [],
       AnswerDatas: [],
       otherComment: "",
       degree_id: this.props.navigation.state.params.degree_id,
@@ -38,9 +38,18 @@ export default class SurveyScreen4 extends Component {
     };
   }
 
+  _setAnswerDatas = (questionId, text) => {
+    var mergeJSON = require("merge-json");
+    var ans = {
+      [`ans-${questionId}`]: text,
+    };
+    this.state.AnswerDatas = mergeJSON.merge(this.state.AnswerDatas, ans);
+    console.log(this.state.AnswerDatas);
+  };
   _dataFromChild = (datas) => {
     //콜백메서드 등록
     this.setState({ QuestionDatas: datas, isLoading: false });
+    console.log(this.state.QuestionDatas);
   };
 
   // componentDidMount() {
@@ -50,6 +59,7 @@ export default class SurveyScreen4 extends Component {
   _ChangeOtherComment = (text) => {
     this.state.otherComment = text;
   };
+
   _getSurveyQuestionList = async () => {
     let url = "http://61.73.147.176/api/v1/survey/question/1";
     try {
@@ -62,7 +72,7 @@ export default class SurveyScreen4 extends Component {
     } catch (error) {
       console.error("_getSurveyQuestionList", error);
     }
-    //   console.log(QuestionDatas);
+    console.log(QuestionDatas);
   };
 
   onRefresh = () => {
@@ -90,17 +100,24 @@ export default class SurveyScreen4 extends Component {
             required={required}
             question={question}
             children={children}
-            // endNumber={this.state.QuestionDatas.length}
             onSelect={this._setValue}
-            // _ChangeOtherComment={this._ChangeOtherComment}
-            // _submitAction={this._submitAction}
           ></QuestionRadio>
-          {/* <OtherComment
-              _ChangeOtherComment={this._ChangeOtherComment}
-              _submitAction={this._submitAction}
-            ></OtherComment> */}
         </View>
       );
+    } else if (type === "text") {
+      return (
+        <View>
+          <QuestionSubjective
+            id={id}
+            degree_id={degree_id}
+            type={type}
+            required={required}
+            question={question}
+            _setAnswerDatas={this._setAnswerDatas}
+          ></QuestionSubjective>
+        </View>
+      );
+    } else {
     }
   };
   _submitAction = async () => {

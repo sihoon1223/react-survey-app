@@ -1,11 +1,18 @@
 import React, { Component } from "react";
 import { RadioGroup, RadioButton } from "react-native-flexi-radio-button";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TextInput } from "react-native";
 
 export default class QuestionRadio extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      id: props.id,
+      type: props.type,
+      question: props.question,
+      text: "",
+      required: props.required,
+      _setAnswerDatas: props._setAnswerDatas,
+    };
   }
 
   render() {
@@ -14,21 +21,26 @@ export default class QuestionRadio extends Component {
     // console.log(radioButtons);
     // this.state.onSelect(this.state.id, radioButtons[0].props.value);
     return (
-      <View>
-        <View style={styles.title_container}>
-          <Text style={styles.title_text}>{this.state.question}</Text>
-        </View>
-        <RadioGroup
-          color="#9575b2"
-          highlightColor="#ccc8b9"
-          onSelect={(value) => {
-            //console.log(radioButtons[value].props.value);
-            this.state.onSelect(this.state.id, radioButtons[value].props.value);
+      <View
+        style={{
+          paddingBottom: 20,
+        }}
+      >
+        <Text style={styles.opinion}>{this.state.question}</Text>
+        <TextInput
+          style={styles.inputArea}
+          placeholder="의견을 작성해주세요."
+          keyboardType="default"
+          multiline
+          onBlur={() =>
+            this.state._setAnswerDatas(this.state.id, this.state.text)
+          }
+          blurOnSubmit={false}
+          returnKeyType="next"
+          onChangeText={(text) => {
+            this.state.text = text;
           }}
-          style={styles.radio_group}
-        >
-          {radioButtons}
-        </RadioGroup>
+        />
       </View>
     );
   }
