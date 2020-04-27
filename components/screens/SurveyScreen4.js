@@ -15,6 +15,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import QuestionRadio from "../component/QuestionRadio";
 
 import OtherComment from "../component/OtherComment";
+import QuestionSubjective from "../component/QuestionSubjective";
 // const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
 const QUESTION_LIST_URL = `${
@@ -40,9 +41,18 @@ export default class SurveyScreen4 extends Component {
     console.log(this.TESTURL);
   }
 
+  _setAnswerDatas = (questionId, text) => {
+    var mergeJSON = require("merge-json");
+    var ans = {
+      [`ans-${questionId}`]: text,
+    };
+    this.state.AnswerDatas = mergeJSON.merge(this.state.AnswerDatas, ans);
+    console.log(this.state.AnswerDatas);
+  };
   _dataFromChild = (datas) => {
     //콜백메서드 등록
     this.setState({ QuestionDatas: datas, isLoading: false });
+    console.log(this.state.QuestionDatas);
   };
 
   _ChangeOtherComment = (text) => {
@@ -74,17 +84,24 @@ export default class SurveyScreen4 extends Component {
             required={required}
             question={question}
             children={children}
-            // endNumber={this.state.QuestionDatas.length}
             onSelect={this._setValue}
-            // _ChangeOtherComment={this._ChangeOtherComment}
-            // _submitAction={this._submitAction}
           ></QuestionRadio>
-          {/* <OtherComment
-              _ChangeOtherComment={this._ChangeOtherComment}
-              _submitAction={this._submitAction}
-            ></OtherComment> */}
         </View>
       );
+    } else if (type === "text") {
+      return (
+        <View>
+          <QuestionSubjective
+            id={id}
+            degree_id={degree_id}
+            type={type}
+            required={required}
+            question={question}
+            _setAnswerDatas={this._setAnswerDatas}
+          ></QuestionSubjective>
+        </View>
+      );
+    } else {
     }
   };
   _submitAction = async () => {
