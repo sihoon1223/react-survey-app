@@ -11,7 +11,7 @@ import {
 import Constants from "expo-constants";
 
 import SurveyItem from "../component/SurveyItem";
-import LoadingScreen from "./LoadingScreen";
+
 import Get from "../module/Get";
 
 const SURVEY_LIST_URL = `${
