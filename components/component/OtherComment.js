@@ -11,6 +11,7 @@ export default class OtherComment extends Component {
   }
 
   render() {
+    console.log("othercomment-render");
     return (
       <View>
         <View
