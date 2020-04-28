@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 
 import {
   FlatList,
@@ -6,11 +6,17 @@ import {
   Text,
   View,
   ActivityIndicator,
+  findNodeHandle,
+  YellowBox,
+  KeyboardAvoidingView,
 } from "react-native";
 
 import Get from "../module/Get";
 
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import {
+  KeyboardAwareScrollView,
+  KeyboardAwareFlatList,
+} from "react-native-keyboard-aware-scroll-view";
 
 import QuestionRadio from "../component/QuestionRadio";
 
@@ -21,11 +27,14 @@ import QuestionSubjective from "../component/QuestionSubjective";
 const QUESTION_LIST_URL = `${
   require("../../assets/setting/config.json").url
 }survey/question/`;
+
 export default class SurveyScreen4 extends Component {
   TESTURL = "";
   constructor(props) {
     super(props);
+    this.scroll = React.createRef();
     // this._getSurveyQuestionList();
+
     this.state = {
       isLoading: true,
       refreshing: false,
@@ -38,7 +47,6 @@ export default class SurveyScreen4 extends Component {
     };
 
     this.TESTURL = QUESTION_LIST_URL + this.state.degree_id;
-    console.log(this.TESTURL);
   }
 
   _setAnswerDatas = (questionId, text) => {
@@ -47,12 +55,12 @@ export default class SurveyScreen4 extends Component {
       [`ans-${questionId}`]: text,
     };
     this.state.AnswerDatas = mergeJSON.merge(this.state.AnswerDatas, ans);
-    console.log(this.state.AnswerDatas);
+    // console.log(this.state.AnswerDatas);
   };
   _dataFromChild = (datas) => {
     //콜백메서드 등록
     this.setState({ QuestionDatas: datas, isLoading: false });
-    console.log(this.state.QuestionDatas);
+    // console.log(this.state.QuestionDatas);
   };
 
   _ChangeOtherComment = (text) => {
@@ -140,9 +148,9 @@ export default class SurveyScreen4 extends Component {
       service_id: this.state.service_id,
       // "ans-*": this.state.AnswerDatas,
     };
-    console.log(body);
+    // console.log(body);
     body = mergeJSON.merge(body, this.state.AnswerDatas);
-    console.log(body);
+    // console.log(body);
 
     // const axios = require("axios");
 
@@ -199,8 +207,13 @@ export default class SurveyScreen4 extends Component {
     console.log("_blurTextInput");
     this.scrollRef.scrollToEnd();
   };
+
+  _scrollToInput(reactNode) {
+    // Add a 'scroll' ref to your ScrollView
+    console.log(this.scroll.current);
+    //this.scroll.current;
+  }
   render() {
-    console.log(this.state.isLoading);
     return this.state.isLoading ? (
       <View style={{ flex: 1, justifyContent: "center" }}>
         <ActivityIndicator size="small" color="gray" />
@@ -214,10 +227,10 @@ export default class SurveyScreen4 extends Component {
           <KeyboardAwareScrollView
             contentContainerStyle={{
               flex: 1,
-              justifyContent: "space-around",
+              // justifyContent: "space-around",
               // alignItems: "center",
-              width: null,
-              height: null,
+              // width: null,
+              // height: null,
             }}
           >
             <FlatList
