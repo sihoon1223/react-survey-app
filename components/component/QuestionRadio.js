@@ -13,7 +13,9 @@ export default class QuestionRadio extends Component {
       required: props.required,
       children: props.children,
       onSelect: props.onSelect,
+      reqCheck: props.reqCheck,
     };
+    this.Radioref = "";
   }
 
   render() {
@@ -28,13 +30,24 @@ export default class QuestionRadio extends Component {
       );
     });
     return (
-      <View>
+      <View
+        onLayout={(event) => {
+          const layout = event.nativeEvent.layout;
+          if (this.state.required === 1) {
+            //false넣기 + layout 오브젝트 넣기?
+            this.state.reqCheck(false, this.state.id);
+          } else {
+            //true넣기 + layout 오브젝트 넣기?
+            this.state.reqCheck(true, this.state.id);
+          }
+        }}
+      >
         <View style={styles.title_container}>
           <Text style={styles.title_text}>{this.state.question}</Text>
           {this.state.required === 1 ? (
             <Text style={styles.title_required}>*</Text>
           ) : (
-            <Text style={styles.title_text}>*</Text>
+            <></>
           )}
         </View>
         <RadioGroup
@@ -43,6 +56,7 @@ export default class QuestionRadio extends Component {
           onSelect={(value) => {
             //console.log(radioButtons[value].props.value);
             this.state.onSelect(this.state.id, radioButtons[value].props.value);
+            this.state.reqCheck(true, this.state.id);
           }}
           style={styles.radio_group}
         >

@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Alert,
   ActivityIndicator,
 } from "react-native";
 
@@ -35,11 +36,23 @@ export default class SurveyScreen4 extends Component {
       degree_id: this.props.navigation.state.params.degree_id,
       department_id: this.props.navigation.state.params.dept_id,
       service_id: this.props.navigation.state.params.service_id,
+      QuestionScrollRef: [],
+      QuestionisAnswered: [],
     };
-
+    this.flatListRef = "";
     this.TESTURL = QUESTION_LIST_URL + this.state.degree_id;
     console.log(this.TESTURL);
   }
+
+  _setAnswerCheck = (isReq, questionId) => {
+    var mergeJSON = require("merge-json");
+
+    this.state.QuestionisAnswered = mergeJSON.merge(
+      this.state.QuestionisAnswered,
+      { [`${questionId}`]: isReq }
+    );
+    console.log(this.state.QuestionisAnswered);
+  };
 
   _setAnswerDatas = (questionId, text) => {
     var mergeJSON = require("merge-json");
@@ -49,10 +62,11 @@ export default class SurveyScreen4 extends Component {
     this.state.AnswerDatas = mergeJSON.merge(this.state.AnswerDatas, ans);
     console.log(this.state.AnswerDatas);
   };
+
   _dataFromChild = (datas) => {
     //콜백메서드 등록
     this.setState({ QuestionDatas: datas, isLoading: false });
-    console.log(this.state.QuestionDatas);
+    //console.log(this.state.QuestionDatas);
   };
 
   _ChangeOtherComment = (text) => {
@@ -72,6 +86,7 @@ export default class SurveyScreen4 extends Component {
   };
 
   _renderQuestion = ({ item }) => {
+    console.log(item);
     const { id, degree_id, type, required, question, children } = item;
 
     if (type === "radio") {
@@ -85,6 +100,7 @@ export default class SurveyScreen4 extends Component {
             question={question}
             children={children}
             onSelect={this._setValue}
+            reqCheck={this._setAnswerCheck}
           ></QuestionRadio>
         </View>
       );
@@ -98,6 +114,7 @@ export default class SurveyScreen4 extends Component {
             required={required}
             question={question}
             _setAnswerDatas={this._setAnswerDatas}
+            reqCheck={this._setAnswerCheck}
           ></QuestionSubjective>
         </View>
       );
@@ -105,6 +122,32 @@ export default class SurveyScreen4 extends Component {
     }
   };
   _submitAction = async () => {
+    console.log("호출2");
+    const firstkey = Object.keys(this.state.QuestionisAnswered)[0];
+
+    for (let item in this.state.QuestionisAnswered) {
+      // console.log(item);
+
+      const index = item - firstkey;
+
+      if (this.state.QuestionisAnswered[item] === false) {
+        //alert("필수 항목을 입력해주세요"); //이유는 모르겠지만 alert 때문에 랜더링이 2번되서 호출 2번함;
+        console.log("호출");
+        this.flatListRef.scrollToIndex({
+          animated: true,
+          index: index,
+        });
+        // console.log(index);
+        return;
+      }
+      // if (this.state.QuestionisAnswered[0] === false) {
+      //   this.flatListRef.scrollToIndex({ animated: true, index: item });
+      //   console.log(this.state.QuestionisAnswered[item] + " " + item);
+      //   alert("필수 항목을 입력해주세요");
+      //   return;
+      // }
+    }
+
     const url = new URL("http://61.73.147.176/api/v1/survey");
 
     let headers = {
@@ -112,12 +155,11 @@ export default class SurveyScreen4 extends Component {
       // "Content-Type": "application/x-www-form-urlencoded",
     };
     var mergeJSON = require("merge-json");
-    if (this.state.otherComment !== "") {
-      var ans = {
-        [`memo`]: this.state.otherComment,
-      };
-      this.state.AnswerDatas = mergeJSON.merge(this.state.AnswerDatas, ans);
-    }
+
+    var ans = {
+      [`memo`]: this.state.otherComment,
+    };
+    this.state.AnswerDatas = mergeJSON.merge(this.state.AnswerDatas, ans);
 
     // console.log(this.state.AnswerDatas);
 
@@ -200,7 +242,7 @@ export default class SurveyScreen4 extends Component {
     this.scrollRef.scrollToEnd();
   };
   render() {
-    console.log(this.state.isLoading);
+    //console.log(this.state.isLoading);
     return this.state.isLoading ? (
       <View style={{ flex: 1, justifyContent: "center" }}>
         <ActivityIndicator size="small" color="gray" />
@@ -222,6 +264,9 @@ export default class SurveyScreen4 extends Component {
           >
             <FlatList
               data={this.state.QuestionDatas}
+              ref={(ref) => {
+                this.flatListRef = ref;
+              }}
               keyExtractor={(item, index) => index.toString()}
               initialNumToRender={20}
               onEndReachedThreshold={1}
@@ -231,6 +276,9 @@ export default class SurveyScreen4 extends Component {
                 overflowX: "hidden",
               }}
               renderItem={this._renderQuestion}
+              // getItemLayout={(data, index) => {
+              //   console.log(data + " " + index);
+              // }}
               ListFooterComponent={
                 <OtherComment
                   _submitAction={this._submitAction}
